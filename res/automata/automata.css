@@ -1,0 +1,17 @@
+.automata {
+	
+}
+
+.automata .dialog {
+	width: 800px;
+}
+
+.automata textarea {
+	width: 696px;
+	height: 300px;
+	margin: 20px 20px 0;
+}
+
+.automata .button-bar {
+	display: block;
+}

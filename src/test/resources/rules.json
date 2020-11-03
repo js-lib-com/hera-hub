@@ -1,0 +1,33 @@
+[
+	{
+		"name": "front-door",
+		"display": null,
+		"icon": null,
+		"events": null,
+		"actionClassName": "js.hera.auto.engine.FrontDoor",
+		"actionParameters": null
+	},
+	{
+		"name": "qqqq",
+		"display": null,
+		"icon": null,
+		"events": null,
+		"actionClassName": "js.hera.auto.engine.FrontDoor",
+		"actionParameters": null
+	},
+	{
+		"name": "power-meter",
+		"display": null,
+		"icon": null,
+		"events": [
+			{
+				"deviceName": "power-meter",
+				"parameters": [
+					"value"
+				]
+			}
+		],
+		"actionClassName": "js.hera.auto.engine.Switch",
+		"actionParameters": null
+	}
+]

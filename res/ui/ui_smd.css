@@ -1,0 +1,46 @@
+body {
+	position: static;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding: 0; 	
+	text-align: center;
+}
+
+.panorama {
+	display: inline-block;
+	position: static;
+	white-space: normal;
+	padding: 0px;	
+}
+
+.panorama .zone {
+	display: block;
+	margin-top: 40px;
+	margin-right: 0px;
+}
+
+.panorama .zone::after {
+	content: "";
+	display: block;
+	clear: both;	
+}
+
+.dialog {
+	position: fixed;
+	width: 80%;
+	margin: 10%;
+	top: 0px;
+}
+
+.light-dimmer .caption h1, .thermostat .caption h1 {
+	font-size: 4vh;
+}
+
+.light-dimmer .caption, .thermostat .caption {
+	height: 8vh;
+	line-height: 8vh;
+}
+
+.light-dimmer .footer, .thermostat .footer {
+    height: 8vh;
+}

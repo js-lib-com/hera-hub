@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-config>
+	<managed-classes>
+		<dao class="js.hera.hub.dao.DaoImpl" interface="js.hera.hub.dao.Dao" />
+		<service interface="js.hera.hub.Service" type="REMOTE" url="http://localhost/hera" />
+	</managed-classes>
+</test-config>

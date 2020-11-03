@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<HTML lang="en">
+<HEAD>
+<META content="text/html; charset=UTF-8" http-equiv="Content-Type"></META>
+<META content="IE=9; IE=8; IE=7; IE=EDGE" http-equiv="X-UA-Compatible"></META>
+<META content="width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport"></META>
+<META content="Iulian Rotaru" name="Author"></META>
+<TITLE>HERA Smart Hub / Ui</TITLE>
+<META content="HERA Smart Hub / Ui" name="Description"></META>
+<LINK href="style/theme-button.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/theme-config-page.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/theme-dialog.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/theme-form.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/theme-led.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/theme-style.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/theme-table-view.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-thermostat-dialog.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-color-led-dialog.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-light-dimmer-dialog.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-power-meter.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-setpoint-thermostat.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-color-led.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-light-dimmer.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-dht-sensor.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui-device.css" rel="stylesheet" type="text/css"></LINK>
+<LINK href="style/ui.css" rel="stylesheet" type="text/css"></LINK>
+</HEAD>
+<BODY class="no-select" xmlns:w="js-lib.com/wood">
+	<DIV class="panorama" data-class="js.ui.DevicesLayout"></DIV>
+	<DIV class="template hidden">
+		<DIV class="disabled device" data-attr="data-name:name" data-class="js.ui.DeviceView"><DIV class="state"></DIV><IMG class="icon" data-src="icon"></IMG><H2 class="name" data-text="display"></H2></DIV>
+		<DIV class="dht-sensor device" data-attr="data-name:name" data-class="js.ui.DHTSensorView"><DIV class="logo panel">
+		<IMG class="icon" data-src="icon"></IMG>
+		<H2 class="name" data-text="display"></H2>
+	</DIV><DIV class="values panel hidden">
+		<H1 class="value"><SPAN class="temperature"></SPAN> ℃</H1>
+		<H1 class="value"><SPAN class="humidity"></SPAN> %</H1>
+	</DIV></DIV>
+		<DIV class="light-dimmer device" data-attr="data-name:name" data-class="js.ui.LightDimmerTile"><DIV class="logo panel">
+		<IMG class="icon" data-src="icon"></IMG>
+		<H2 class="name" data-text="display"></H2>
+	</DIV><DIV class="values panel hidden">
+		<H1 class="brightness"><SPAN class="value"></SPAN> %</H1>
+	</DIV></DIV>
+		<DIV class="color-led device" data-attr="data-name:name" data-class="js.ui.ColorLedTile"><DIV class="logo panel">
+		<IMG class="icon" data-src="icon"></IMG>
+		<H2 class="name" data-text="display"></H2>
+	</DIV><DIV class="values panel hidden">
+		<DIV class="color-preview"></DIV>
+	</DIV></DIV>
+		<DIV class="setpoint-thermostat device" data-attr="data-name:name" data-class="js.ui.SetpointThermostatView"><DIV class="logo panel">
+		<IMG class="icon" data-src="icon"></IMG>
+		<H2 class="name" data-text="display"></H2>
+	</DIV><DIV class="values panel hidden">
+		<H1 class="value"><SPAN class="temperature"></SPAN> ℃</H1>
+	</DIV></DIV>
+		<DIV class="device power-meter" data-attr="data-name:name" data-class="js.ui.PowerMeterView"><DIV class="values panel">
+		<H1 class="value"><SPAN class="energy"></SPAN></H1>
+		<H1 class="value"><SPAN class="power"></SPAN> W</H1>
+	</DIV></DIV>
+	</DIV>
+	<DIV class="light-dimmer dialog hidden" data-class="js.ui.LightDimmerDialog"><DIV class="caption">
+		<IMG name="close-dialog" src="media/asset_arrow-left.png"></IMG>
+		<H1 class="title">Light Dimmer</H1>
+	</DIV><DIV class="body">
+		<DIV class="container">
+			<H2>
+				Brightness: <SPAN class="brightness">75</SPAN>%
+			</H2>
+			<INPUT class="slider" max="100" min="0" type="range" value="50"></INPUT>
+		</DIV>
+	</DIV><DIV class="footer"></DIV></DIV>
+	<DIV class="color-led dialog hidden" data-class="js.ui.ColorLedDialog"><DIV class="caption">
+		<IMG name="close-dialog" src="media/asset_arrow-left.png"></IMG>
+		<H1 class="title">Color LED</H1>
+	</DIV><DIV class="body">
+		<DIV class="container">
+			<H2>Red</H2>
+			<INPUT class="slider" max="100" min="0" name="red" type="range" value="50"></INPUT>
+			<H2>Green</H2>
+			<INPUT class="slider" max="100" min="0" name="green" type="range" value="50"></INPUT>
+			<H2>Blue</H2>
+			<INPUT class="slider" max="100" min="0" name="blue" type="range" value="50"></INPUT>
+		</DIV>
+	</DIV><DIV class="footer"></DIV></DIV>
+	<DIV class="dialog thermostat hidden" data-class="js.ui.SetpointThermostatDialog"><DIV class="caption">
+		<IMG name="close-dialog" src="media/asset_arrow-left.png"></IMG>
+		<H1>Central Heating</H1>
+	</DIV><DIV class="value">
+		<H1><SPAN class="temperature"></SPAN> ℃</H1>
+		<H2>Current Temperature</H2>
+	</DIV><DIV class="arrow">
+		<IMG name="temperature-up" src="media/ui-thermostat-dialog_arrow-up.png"></IMG>
+	</DIV><DIV class="value">
+		<H1><SPAN class="setpoint"></SPAN> ℃</H1>
+		<H2>Set Temperature</H2>
+	</DIV><DIV class="arrow">
+		<IMG name="temperature-down" src="media/ui-thermostat-dialog_arrow-down.png"></IMG>
+	</DIV></DIV>
+<SCRIPT src="script/js-lib.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/gen.js.hera.hub.Service.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.LightDimmerDialog.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.Panorama.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.DevicesLayout.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.ColorLedTile.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.DHTSensorView.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.ColorLedDialog.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.LightDimmerTile.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.SetpointThermostatDialog.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.Page.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.net.EventStreamManager.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.DeviceView.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.PowerMeterView.js" type="text/javascript"></SCRIPT>
+<SCRIPT src="script/js.ui.SetpointThermostatView.js" type="text/javascript"></SCRIPT>
+</BODY>
+</HTML>

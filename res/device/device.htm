@@ -1,0 +1,55 @@
+<section w:template="page#body" class="device" w:script="js.hera.DevicesPage" xmlns:w="js-lib.com/wood">
+	<table data-class="js.widget.TableView">
+		<tr>
+			<td>ID</td>
+			<td>Zone</td>
+			<td>Category</td>
+			<td>Name</td>
+			<td>Display</td>
+			<td>Class</td>
+			<td class="spare"></td>
+		</tr>
+		<tr>
+			<td data-text="id"></td>
+			<td data-text="zoneDisplay"></td>
+			<td data-text="categoryDisplay"></td>
+			<td data-text="name"></td>
+			<td data-text="display"></td>
+			<td data-text="deviceClass"></td>
+			<td></td>
+		</tr>
+	</table>
+
+	<div class="button-bar">
+		<button name="create">Create</button>
+		<button name="edit">Edit</button>
+		<button name="remove">Remove</button>
+	</div>
+	
+	<div data-name="dialog" class="dialog hidden">
+		<form class="category">
+			<fieldset>
+				<label>Zone</label>
+				<select name="zoneId" data-load="rest/zones"></select>
+				<br />
+				<label>Category</label>
+				<select name="categoryId" data-load="rest/categories"></select>
+				<br /> 
+				<label>Class</label>
+				<select name="deviceClass" data-load="rest/device-classes"></select>
+			</fieldset>
+			<fieldset>
+				<label>Name</label>
+				<input name="name" placeholder="binary-light1" />
+				<br /> 
+				<label>Display</label>
+				<input name="display" placeholder="Parent Light 1" />
+			</fieldset>
+		</form>
+		
+		<div class="button-bar">
+			<button name="save">Save</button>
+			<button name="cancel">Cancel</button>
+		</div>
+	</div>	
+</section>

@@ -1,0 +1,29 @@
+<section w:template="page#body" class="icon" w:script="js.hera.IconsPage" xmlns:w="js-lib.com/wood">
+	<div data-name="icons-list-view" class="large-icons" w:compo="lib/list-control" data-list="."></div>
+
+	<div data-name="upload-dialog" class="dialog">
+		<form>
+			<fieldset>
+				<label>Icon</label>
+				<input name="icon" type="file" accept=".png" />
+			</fieldset>
+		</form>
+		<div class="button-bar">
+			<button name="upload">Upload</button>
+		</div>
+	</div>
+	
+	<div data-name="edit-dialog" class="dialog hidden">
+		<form>
+			<fieldset>
+				<label>Name</label>
+				<input name="name" placeholder="bedroom" />
+			</fieldset>
+		</form>
+		<div class="button-bar">
+			<button name="save">Save</button>
+			<button name="remove">Remove</button>
+			<button name="cancel">Cancel</button>
+		</div>
+	</div>	
+</section>

@@ -1,0 +1,13 @@
+.dht-sensor {
+	
+}
+
+.dht-sensor .value {
+	background-color: orange;
+	color: white;
+	text-align: center;
+	font-size: 26px;
+	height: 36px;
+	line-height: 36px;
+	margin: 10px 0;
+}

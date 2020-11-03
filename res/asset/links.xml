@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<link>
+	<zone>zone.htm</zone>
+	<category>category.htm</category>
+	<device>device.htm</device>
+	<light>light.htm</light>
+	<contact-switch>contact-switch.htm</contact-switch>
+	<host>host.htm</host>
+	<icon>icon.htm</icon>
+	<test>test.htm</test>
+	<ui>ui.htm</ui>
+	<automata>automata.htm</automata>
+	<slider>slider.htm</slider>
+</link>

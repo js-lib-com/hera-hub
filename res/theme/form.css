@@ -1,0 +1,147 @@
+form {
+	
+}
+
+fieldset {
+	border: solid 1px #E6E6E6;
+	margin-bottom: 20px;
+	padding: 20px;
+	border-top-color: #E0E0E0;
+	background: linear-gradient(to bottom, #F0F0F0, #FFFFFF);
+}
+
+fieldset.collapsed {
+	background-image: none;
+	border-left-style: none;
+	border-bottom-style: none;
+	border-right-style: none;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-top-color: #A7E2AF;
+}
+
+fieldset.collapsed * {
+	display: none;
+}
+
+legend {
+	font-size: 11px;
+	font-weight: normal;
+	color: #000000;
+	padding: 0px 8px;
+	vertical-align: bottom;
+	cursor: pointer;
+}
+
+body.rtl legend {
+	float: right;
+}
+
+label {
+	display: inline-block;
+	width: 100px;
+	font-size: 11px;
+	height: 22px;
+	line-height: 22px;
+	padding: 2px 0;
+	border: solid 1px transparent;
+	margin: 0 6px 6px 0;
+}
+
+body.rtl label {
+	float: right;
+}
+
+input[type="text"],input[type="file"],input[type="password"],input[type="email"],input[type="tel"]
+	{
+	width: 400px;
+	height: 22px;
+	font-size: 11px;
+	padding: 2px 8px;
+	margin-bottom: 6px;
+}
+
+input[type="text"].small,input[type="file"].small,input[type="password"].small
+	{
+	width: 80px;
+}
+
+input[type="radio"] {
+	width: inherit;
+	height: inherit;
+	line-height: inherit;
+	margin-top: 6px;
+}
+
+input[type="checkbox"] {
+	width: inherit;
+	height: inherit;
+	line-height: inherit;
+	margin-top: 6px;
+}
+
+input[data-type="number"] {
+	width: 30px;
+}
+
+input[data-type="date"] {
+	width: 60px;
+}
+
+input[data-type="time"] {
+	width: 60px;
+}
+
+select {
+	font-size: 11px;
+	padding: 2px 2px 2px 8px;
+	margin-bottom: 6px;
+	height: 28px;
+}
+
+.gecko select {
+	position: relative;
+	top: -3px;
+}
+
+select option {
+	xheight: 28px;
+	xline-height: 22px;
+	padding: 2px 2px 2px 8px;
+}
+
+textarea {
+	font-size: 11px;
+	width: 300px;
+	height: 60px;
+	padding: 2px 8px;
+	margin-bottom: 6px;
+	overflow: hidden;
+	padding: 2px 8px;
+}
+
+input,textarea,select {
+	border: solid 1px #E6E6E6;
+	background: linear-gradient(#FAFAFA, #FFFFFF, #FAFAFA);
+	background-color: #FFFFFF;
+	margin-right: 6px;
+}
+
+input:hover,textarea:hover,select:hover {
+	border-color: #00A000;
+}
+
+input.invalid,textarea.invalid,select.invalid {
+	border-color: #A00000;
+}
+
+input:focus,textarea:focus,select:focus {
+	background-image: none;
+	border-color: #B0B0B0;
+}
+
+form fieldset br {
+	clear: both;
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app>
+	<managed-classes>
+		<app interface="js.tiny.container.core.App" class="js.hera.Application" />
+
+		<dao interface="js.hera.hub.dao.Dao" class="js.hera.hub.dao.DaoImpl" type="PROXY" scope="APPLICATION" />
+
+		<service interface="js.hera.hub.Service" class="js.hera.hub.impl.ServiceImpl" />
+		<message-broker interface="js.hera.hub.MessageBroker" class="js.hera.hub.impl.MessageBrokerImpl" />
+		<device-manager class="js.hera.hub.impl.DeviceManager" />
+
+		<push-stream class="js.hera.hub.impl.DeviceEventStream" interface="js.tiny.container.net.EventStream" scope="LOCAL" />
+	</managed-classes>
+</app>

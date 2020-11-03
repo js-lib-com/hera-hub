@@ -1,0 +1,27 @@
+body {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 1200px;
+	padding: 4px;
+	margin: 0 auto 20px;
+	font-family: Tahoma;
+	font-size: 11px;
+}
+
+h1 {
+	font-size: 20px;
+	font-weight: normal;
+	margin: 20px 0;
+}
+
+.hidden {
+	display: none;
+}
+
+.no-select {
+	user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+}

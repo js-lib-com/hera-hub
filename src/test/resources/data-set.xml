@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-set>
+	<user>
+		<id>1</id>
+		<name>Iulian Rotaru</name>
+		<account>developer</account>
+		<password>q1w2e3r4</password>
+	</user>
+	<contact>
+		<id>1</id>
+		<name>Phantom Ltd.</name>
+		<address>N.Y. 12345, A3</address>
+		<phone>+01 555-666</phone>
+		<email>contact@phantom.com</email>
+		<site>http://www.phantom.com</site>
+	</contact>
+	<contact>
+		<id>2</id>
+		<name>John Doe</name>
+		<address>Nowhere no. 1</address>
+		<phone>+01 555-777</phone>
+		<email>john.doe@gmail.com</email>
+		<site>http://www.johndoe.com</site>
+	</contact>
+</data-set>

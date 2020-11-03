@@ -1,0 +1,12 @@
+.color-led {
+}
+
+.color-led .panel .color-preview {
+	background-color: orange;
+	color: white;
+	text-align: center;
+	font-size: 26px;
+	height: 36px;
+	line-height: 36px;
+	margin: 34px 0;
+}

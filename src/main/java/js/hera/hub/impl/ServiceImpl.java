@@ -1,0 +1,441 @@
+package js.hera.hub.impl;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import js.hera.Application;
+import js.hera.auto.engine.ActionDescriptor;
+import js.hera.auto.engine.Automata;
+import js.hera.auto.engine.DeviceActionHandler;
+import js.hera.auto.engine.Rule;
+import js.hera.dev.Actuator;
+import js.hera.dev.BinaryLight;
+import js.hera.dev.ColorLED;
+import js.hera.dev.ContactSwitch;
+import js.hera.dev.DHTSensor;
+import js.hera.dev.Device;
+import js.hera.dev.LightDimmer;
+import js.hera.dev.LightSensor;
+import js.hera.dev.MotionLight;
+import js.hera.dev.PowerMeter;
+import js.hera.dev.RadioSwitch;
+import js.hera.dev.TemperatureSensor;
+import js.hera.dev.Thermostat;
+import js.hera.dev.ThermostatSensor;
+import js.hera.hub.Service;
+import js.hera.hub.dao.Dao;
+import js.hera.hub.model.DeviceCategory;
+import js.hera.hub.model.DeviceDTO;
+import js.hera.hub.model.DeviceDescriptor;
+import js.hera.hub.model.Host;
+import js.hera.hub.model.Icon;
+import js.hera.hub.model.PowerMeterValue;
+import js.hera.hub.model.SelectItem;
+import js.hera.hub.model.SystemDescriptor;
+import js.hera.hub.model.Zone;
+import js.io.FilesIterator;
+import js.log.Log;
+import js.log.LogFactory;
+import js.tiny.container.core.App;
+import js.tiny.container.core.AppContext;
+import js.tiny.container.http.form.UploadedFile;
+import js.util.Files;
+import js.util.Params;
+import js.util.Strings;
+
+/**
+ * Application service.
+ * 
+ * @author Iulian Rotaru
+ */
+final class ServiceImpl implements Service, DeviceActionHandler
+{
+  private static final Log log = LogFactory.getLog(ServiceImpl.class);
+
+  private final Application application;
+  private final AppContext context;
+  private final Dao dao;
+  private final Automata automata;
+
+  public ServiceImpl(AppContext context, Dao dao) throws IOException
+  {
+    this.application = context.getInstance(App.class);
+    this.context = context;
+    this.dao = dao;
+    this.automata = application.getAutomata();
+    this.automata.setDeviceActionHandler(this);
+  }
+
+  // ------------------------------------------------------
+  // HERA Smart Hub services
+
+  @Override
+  public SystemDescriptor getSystemDescriptor()
+  {
+    SystemDescriptor systemDescriptor = new SystemDescriptor();
+    systemDescriptor.setZones(dao.getZones());
+    systemDescriptor.setDeviceCategories(dao.getDeviceCategories());
+    systemDescriptor.setDeviceDescriptors(dao.getDeviceDescriptors());
+    systemDescriptor.setIconNames(getIconNames());
+    return systemDescriptor;
+  }
+
+  @Override
+  public Object invokeDeviceAction(String deviceName, String actionName, Object... arguments) throws Exception
+  {
+    Params.notEmpty(deviceName, "Device name");
+    Params.notEmpty(actionName, "Action name");
+
+    log.trace("invokeDeviceAction(String, String, Object...)");
+    log.debug("deviceName=|%s| actionName=|%s| arguments=%s", deviceName, actionName, arguments);
+
+    DeviceDescriptor descriptor = dao.getDeviceDescriptor(deviceName);
+    if(descriptor == null) {
+      log.bug("Missing descriptor for device |%s|.", deviceName);
+      return null;
+    }
+    if(!descriptor.isDeviceActive()) {
+      log.warn("Inactive device |%s|.", deviceName);
+      return null;
+    }
+
+    DeviceActionProxy proxy = ActionProxyFactory.createActionProxy(descriptor);
+    return proxy.exec(descriptor, actionName, arguments);
+  }
+
+  // ------------------------------------------------------
+  // HERA Admin Console services
+
+  @Override
+  public List<DeviceDescriptor> getDevicesByZone(int zoneId)
+  {
+    return dao.getDevicesByZone(zoneId);
+  }
+
+  @Override
+  public List<DeviceDescriptor> getDevicesByCategory(int categoryId)
+  {
+    return dao.getDevicesByCategory(categoryId);
+  }
+
+  @Override
+  public Zone createZone(Zone zone)
+  {
+    Params.EQ(zone.getId(), 0, "Device ID");
+    dao.createZone(zone);
+    // after dao create, zone id is updated
+    return zone;
+  }
+
+  @Override
+  public DeviceCategory createCategory(DeviceCategory category)
+  {
+    Params.EQ(category.getId(), 0, "Category ID");
+    dao.createCategory(category);
+    // after dao create, zone id is updated
+    return category;
+  }
+
+  @Override
+  public Zone readZone(int zoneId)
+  {
+    return dao.readZone(zoneId);
+  }
+
+  @Override
+  public Zone updateZone(Zone zone)
+  {
+    dao.updateZone(zone);
+    return zone;
+  }
+
+  @Override
+  public DeviceCategory updateCategory(DeviceCategory category)
+  {
+    dao.updateCategory(category);
+    return category;
+  }
+
+  @Override
+  public void deleteZone(int zoneId)
+  {
+    dao.deleteZone(zoneId);
+  }
+
+  @Override
+  public DeviceDTO createDevice(DeviceDescriptor device)
+  {
+    Params.EQ(device.getId(), 0, "Device ID");
+    dao.createDevice(device);
+    // after dao create, device id is updated
+    return new DeviceDTO(device);
+  }
+
+  @Override
+  public DeviceDescriptor readDevice(int deviceId)
+  {
+    return dao.readDevice(deviceId);
+  }
+
+  @Override
+  public DeviceDTO updateDevice(DeviceDescriptor device)
+  {
+    DeviceDescriptor persistedInstance = dao.getDevice(device.getId());
+    persistedInstance.update(device);
+    dao.updateDevice(persistedInstance);
+    return new DeviceDTO(device);
+  }
+
+  @Override
+  public void deleteDevice(int deviceId)
+  {
+    dao.deleteDevice(deviceId);
+  }
+
+  @Override
+  public List<Zone> getZones()
+  {
+    List<Zone> zones = dao.getZones();
+    for(Zone zone : zones) {
+      zone.setDevicesCount(dao.getDevicesCountByZone(zone.getId()));
+    }
+    return zones;
+  }
+
+  @Override
+  public List<String> getBinaryLights()
+  {
+    DeviceCategory category = dao.getDeviceCategoryByName("lights");
+    if(category == null) {
+      return Collections.emptyList();
+    }
+
+    List<String> binaryLights = new ArrayList<String>();
+    for(DeviceDescriptor device : dao.getDevicesByCategory(category.getId())) {
+      binaryLights.add(device.getName());
+    }
+
+    return binaryLights;
+  }
+
+  @Override
+  public List<DeviceCategory> getCategories()
+  {
+    List<DeviceCategory> categories = dao.getDeviceCategories();
+    for(DeviceCategory category : categories) {
+      category.setDevicesCount(dao.getDevicesCountByCategory(category.getId()));
+    }
+    return categories;
+  }
+
+  @Override
+  public List<DeviceDTO> getDevices()
+  {
+    List<DeviceDTO> devices = new ArrayList<DeviceDTO>();
+    for(DeviceDescriptor descriptor : dao.getDeviceDescriptors()) {
+      devices.add(new DeviceDTO(descriptor));
+    }
+    return devices;
+  }
+
+  @Override
+  public List<SelectItem> getZoneItems()
+  {
+    List<SelectItem> items = new ArrayList<SelectItem>();
+    for(Zone zone : dao.getZones()) {
+      items.add(new SelectItem(zone));
+    }
+    return items;
+  }
+
+  @Override
+  public List<SelectItem> getCategoryItems()
+  {
+    List<SelectItem> items = new ArrayList<SelectItem>();
+    for(DeviceCategory category : dao.getDeviceCategories()) {
+      items.add(new SelectItem(category));
+    }
+    return items;
+  }
+
+  private static List<Class<? extends Device>> DEVICE_CLASSES = new ArrayList<Class<? extends Device>>();
+  static {
+    DEVICE_CLASSES.add(Actuator.class);
+    DEVICE_CLASSES.add(BinaryLight.class);
+    DEVICE_CLASSES.add(ColorLED.class);
+    DEVICE_CLASSES.add(ContactSwitch.class);
+    DEVICE_CLASSES.add(DHTSensor.class);
+    DEVICE_CLASSES.add(LightDimmer.class);
+    DEVICE_CLASSES.add(LightSensor.class);
+    DEVICE_CLASSES.add(MotionLight.class);
+    DEVICE_CLASSES.add(PowerMeter.class);
+    DEVICE_CLASSES.add(RadioSwitch.class);
+    DEVICE_CLASSES.add(TemperatureSensor.class);
+    DEVICE_CLASSES.add(Thermostat.class);
+    DEVICE_CLASSES.add(ThermostatSensor.class);
+  }
+
+  @Override
+  public List<Class<? extends Device>> getDeviceClasses()
+  {
+    return DEVICE_CLASSES;
+  }
+
+  @Override
+  public List<DeviceDescriptor> getDevicesByCategoryName(String categoryName)
+  {
+    DeviceCategory category = dao.getDeviceCategoryByName(categoryName);
+    if(category == null) {
+      return Collections.emptyList();
+    }
+    return getDevicesByCategory(category.getId());
+  }
+
+  @Override
+  public void deleteCategory(int categoryId)
+  {
+    dao.deleteCategory(categoryId);
+  }
+
+  @Override
+  public List<Host> getHosts()
+  {
+    return dao.getHosts();
+  }
+
+  @Override
+  public List<Icon> getIcons()
+  {
+    List<Icon> icons = new ArrayList<Icon>();
+    int id = 1;
+    for(File file : FilesIterator.getRelativeIterator(getIconsDir())) {
+      icons.add(new Icon(id++, Files.basename(file), "/icons/" + file.getName()));
+    }
+    return icons;
+  }
+
+  @Override
+  public void uploadIcon(UploadedFile icon) throws IOException
+  {
+    log.debug("Upload icon file |%s| with type |%s| and name |%s|", icon.getFileName(), icon.getContentType(), icon.getName());
+    icon.moveTo(getIconsDir());
+  }
+
+  @Override
+  public List<String> getIconNames()
+  {
+    List<String> names = new ArrayList<String>();
+    for(File file : FilesIterator.getRelativeIterator(getIconsDir())) {
+      names.add(Files.basename(file));
+    }
+    Collections.sort(names);
+    return names;
+  }
+
+  @Override
+  public void updateIconName(String iconName, String newName)
+  {
+    log.debug("Update icon |%s| name to |%s|.", iconName, newName);
+
+    for(Zone zone : dao.getZonesByIcon(iconName)) {
+      zone.setIcon(newName);
+      dao.updateZone(zone);
+    }
+    for(DeviceCategory category : dao.getCategoriesByIcon(iconName)) {
+      category.setIcon(newName);
+      dao.updateCategory(category);
+    }
+
+    File iconsDir = getIconsDir();
+    File icon = new File(iconsDir, iconName + ".png");
+    File newIcon = new File(iconsDir, newName + ".png");
+    icon.renameTo(newIcon);
+  }
+
+  @Override
+  public boolean isIconUsed(String iconName)
+  {
+    if(!dao.getZonesByIcon(iconName).isEmpty()) {
+      return true;
+    }
+    if(!dao.getCategoriesByIcon(iconName).isEmpty()) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public void removeIcon(String iconName)
+  {
+    log.debug("Remove icon |%s|.", iconName);
+    File iconsDir = getIconsDir();
+    File icon = new File(iconsDir, iconName + ".png");
+    icon.delete();
+  }
+
+  private File getIconsDir()
+  {
+    File iconsDir = new File(System.getProperty("catalina.base") + "/webapps");
+    iconsDir = new File(iconsDir, "icons");
+    if(!iconsDir.isDirectory()) {
+      iconsDir.mkdirs();
+    }
+    return iconsDir;
+  }
+
+  @Override
+  public PowerMeterValue getPowerMeterValue() throws NumberFormatException, IOException
+  {
+    File energyIndex = context.getAppFile("energy-index");
+    return new PowerMeterValue(Double.parseDouble(Strings.load(energyIndex)), Application.instance().getPowerValue());
+  }
+
+  // ------------------------------------------------------
+  // auto
+
+  @Override
+  public ActionDescriptor createActionCode(String actionDisplay) throws IOException
+  {
+    return automata.createActionClass(actionDisplay);
+  }
+
+  @Override
+  public void saveAction(ActionDescriptor action) throws IOException, ClassNotFoundException
+  {
+    automata.saveAction(action);
+  }
+
+  @Override
+  public void removeAction(String actionClassName)
+  {
+    automata.removeAction(actionClassName);
+  }
+
+  @Override
+  public void saveRule(Rule rule) throws ClassNotFoundException, IOException
+  {
+    automata.saveRule(rule);
+  }
+
+  @Override
+  public void removeRule(String ruleName) throws IOException
+  {
+    automata.removeRule(ruleName);
+  }
+
+  @Override
+  public Set<ActionDescriptor> getActions()
+  {
+    return automata.getActions();
+  }
+
+  @Override
+  public Set<Rule> getRules()
+  {
+    return automata.getRules();
+  }
+}
