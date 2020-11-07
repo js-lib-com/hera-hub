@@ -10,21 +10,35 @@ $include("js.hera.hub.Service");
  * 
  * @constructor Construct an instance of HostsPage class.
  */
-js.hera.HostsPage = function() {
+js.hera.HostsPage = function () {
 	this.$super();
-
-	this._tableView = this.getByClass(js.widget.TableView);
-	this._tableView.on("selection-update", this._onSelectionUpdate, this);
-
 	Service.getHosts(this._onHosts, this);
+
+	this._doCreate = Service.createHost;
+	this._doUpdate = Service.updateHost;
+	this._doRemove = Service.deleteHost;
+
+	this.getByName("subscribe").on("click", this._onSubscribe, this);
 };
 
 js.hera.HostsPage.prototype = {
-	_onHosts : function(hosts) {
+	_onHosts: function (hosts) {
 		this._tableView.setObject(hosts);
 	},
 
-	_onSelectionUpdate : function(selectedItems) {
+	_isRemoveable: function (host) {
+		if (host.devicesCount > 0) {
+			js.ua.System.alert("Host %s has %d devices and cannot be removed.", host.display, host.devicesCount);
+			return false;
+		}
+		return true;
+	},
+
+	_onSubscribe: function () {
+		Service.subscribeHosts(function (hosts) {
+			js.ua.System.alert("Done");
+			this._onHosts(hosts);
+		}, this);
 	},
 
 	/**
@@ -32,8 +46,8 @@ js.hera.HostsPage.prototype = {
 	 * 
 	 * @return this class string representation.
 	 */
-	toString : function() {
+	toString: function () {
 		return "js.hera.HostsPage";
 	}
 };
-$extends(js.hera.HostsPage, js.ua.Page);
+$extends(js.hera.HostsPage, js.hera.TablePage);

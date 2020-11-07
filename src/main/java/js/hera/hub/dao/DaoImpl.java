@@ -245,6 +245,12 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
   }
 
   @Override
+  public Host getHost(int hostId)
+  {
+    return hostStore.get(hostId);
+  }
+
+  @Override
   public DeviceDescriptor getDevice(int deviceId)
   {
     return deviceStore.get(deviceId);
@@ -268,6 +274,18 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
         return name.equals(host.getName());
       }
     });
+  }
+
+  @Override
+  public void createHost(Host host)
+  {
+    hostStore.put(host.getId(), host);
+  }
+
+  @Override
+  public void deleteHost(int hostId)
+  {
+    hostStore.remove(hostId);
   }
 
   @Override

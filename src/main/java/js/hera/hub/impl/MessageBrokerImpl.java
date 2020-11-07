@@ -6,11 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import js.hera.Application;
 import js.hera.auto.engine.Automata;
-import js.hera.dev.HostSystem;
+import js.hera.hub.Application;
 import js.hera.hub.DeviceState;
-import js.hera.hub.LogRecord;
 import js.hera.hub.Message;
 import js.hera.hub.MessageBroker;
 import js.log.Log;
@@ -22,7 +20,6 @@ import js.tiny.container.net.EventStream;
 class MessageBrokerImpl implements MessageBroker
 {
   private static final Log log = LogFactory.getLog(MessageBrokerImpl.class);
-  private static final Log deviceLogger = LogFactory.getLog(HostSystem.class);
 
   private final Automata automata;
   private final List<EventStream> streams = Collections.synchronizedList(new ArrayList<EventStream>());
@@ -50,6 +47,9 @@ class MessageBrokerImpl implements MessageBroker
   {
     log.trace("publish(Message)");
 
+    // {"deviceName":"thermostat-sensor","temperature":"23.45"}
+    // {"deviceName":"bathroom-dht","humidity":"62","temperature":"23.45"}
+
     switch(message.getType()) {
     case DEVICE_STATE:
       final DeviceState deviceState = message.value();
@@ -73,8 +73,7 @@ class MessageBrokerImpl implements MessageBroker
       break;
 
     case LOG_RECORD:
-      final LogRecord logRecord = message.value();
-      deviceLogger.print(logRecord.getLevel(), logRecord.getMessage());
+      // TODO: deprecated
       break;
     }
   }

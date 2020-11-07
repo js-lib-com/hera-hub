@@ -7,10 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import js.hera.Application;
 import js.hera.auto.engine.ActionDescriptor;
 import js.hera.auto.engine.Automata;
-import js.hera.auto.engine.DeviceActionHandler;
 import js.hera.auto.engine.Rule;
 import js.hera.dev.Actuator;
 import js.hera.dev.BinaryLight;
@@ -26,6 +24,7 @@ import js.hera.dev.RadioSwitch;
 import js.hera.dev.TemperatureSensor;
 import js.hera.dev.Thermostat;
 import js.hera.dev.ThermostatSensor;
+import js.hera.hub.Application;
 import js.hera.hub.Service;
 import js.hera.hub.dao.Dao;
 import js.hera.hub.model.DeviceCategory;
@@ -52,22 +51,24 @@ import js.util.Strings;
  * 
  * @author Iulian Rotaru
  */
-final class ServiceImpl implements Service, DeviceActionHandler
+final class ServiceImpl implements Service
 {
   private static final Log log = LogFactory.getLog(ServiceImpl.class);
 
-  private final Application application;
   private final AppContext context;
+  private final Application application;
   private final Dao dao;
+  private final HostManager hostManager;
   private final Automata automata;
 
-  public ServiceImpl(AppContext context, Dao dao) throws IOException
+  public ServiceImpl(AppContext context) throws IOException
   {
-    this.application = context.getInstance(App.class);
+    log.trace("ServiceImpl(AppContext)");
     this.context = context;
-    this.dao = dao;
+    this.application = context.getInstance(App.class);
+    this.dao = context.getInstance(Dao.class);
+    this.hostManager = context.getInstance(HostManager.class);
     this.automata = application.getAutomata();
-    this.automata.setDeviceActionHandler(this);
   }
 
   // ------------------------------------------------------
@@ -98,13 +99,14 @@ final class ServiceImpl implements Service, DeviceActionHandler
       log.bug("Missing descriptor for device |%s|.", deviceName);
       return null;
     }
-    if(!descriptor.isDeviceActive()) {
-      log.warn("Inactive device |%s|.", deviceName);
+    Host host = dao.getHost(descriptor.getHostId());
+    if(!host.isActive()) {
+      log.warn("Inactive host |%s|. Device |%s| is unreachable.", host.getName(), descriptor.getName());
       return null;
     }
 
     DeviceActionProxy proxy = ActionProxyFactory.createActionProxy(descriptor);
-    return proxy.exec(descriptor, actionName, arguments);
+    return proxy.exec(dao.getHost(descriptor.getHostId()).getName(), descriptor, actionName, arguments);
   }
 
   // ------------------------------------------------------
@@ -125,7 +127,7 @@ final class ServiceImpl implements Service, DeviceActionHandler
   @Override
   public Zone createZone(Zone zone)
   {
-    Params.EQ(zone.getId(), 0, "Device ID");
+    Params.EQ(zone.getId(), 0, "Zone ID");
     dao.createZone(zone);
     // after dao create, zone id is updated
     return zone;
@@ -164,6 +166,34 @@ final class ServiceImpl implements Service, DeviceActionHandler
   public void deleteZone(int zoneId)
   {
     dao.deleteZone(zoneId);
+  }
+
+  @Override
+  public Host createHost(Host host)
+  {
+    Params.EQ(host.getId(), 0, "Host ID");
+    dao.createHost(host);
+    // after dao create, host id is updated
+    return host;
+  }
+
+  @Override
+  public Host updateHost(Host host)
+  {
+    dao.updateHost(host);
+    return host;
+  }
+
+  @Override
+  public List<Host> subscribeHosts()
+  {
+    return hostManager.subscribe();
+  }
+
+  @Override
+  public void deleteHost(int hostId)
+  {
+    dao.deleteHost(hostId);
   }
 
   @Override
@@ -258,6 +288,16 @@ final class ServiceImpl implements Service, DeviceActionHandler
     List<SelectItem> items = new ArrayList<SelectItem>();
     for(DeviceCategory category : dao.getDeviceCategories()) {
       items.add(new SelectItem(category));
+    }
+    return items;
+  }
+
+  @Override
+  public List<SelectItem> getHostnameItems()
+  {
+    List<SelectItem> items = new ArrayList<SelectItem>();
+    for(Host host : dao.getHosts()) {
+      items.add(new SelectItem(host));
     }
     return items;
   }

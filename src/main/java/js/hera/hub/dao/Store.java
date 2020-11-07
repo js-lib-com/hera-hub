@@ -71,7 +71,11 @@ public class Store<T>
 
   public synchronized T get(int id)
   {
-    return store.get(id);
+    T t = store.get(id);
+    if(t instanceof PostLoad) {
+      ((PostLoad)t).postLoad(context);
+    }
+    return t;
   }
 
   public synchronized void put(int id, T t)
@@ -103,7 +107,13 @@ public class Store<T>
    */
   public synchronized List<T> values()
   {
-    return Collections.unmodifiableList(new ArrayList<T>(store.values()));
+    List<T> values = new ArrayList<T>(store.values());
+    for(T value : values) {
+      if(value instanceof PostLoad) {
+        ((PostLoad)value).postLoad(context);
+      }
+    }
+    return Collections.unmodifiableList(values);
   }
 
   public synchronized List<T> values(Predicate<T> predicate)

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import js.hera.auto.engine.ActionDescriptor;
+import js.hera.auto.engine.DeviceActionHandler;
 import js.hera.auto.engine.Rule;
 import js.hera.dev.Device;
 import js.hera.hub.model.DeviceCategory;
@@ -23,7 +24,7 @@ import js.tiny.container.http.form.UploadedFile;
 
 @Remote
 @Public
-public interface Service
+public interface Service extends DeviceActionHandler
 {
   // ------------------------------------------------------
   // HERA Smart Hub services
@@ -56,6 +57,14 @@ public interface Service
 
   Zone updateZone(Zone zone);
 
+  Host createHost(Host host);
+
+  Host updateHost(Host host);
+
+  void deleteHost(int hostId);
+
+  List<Host> subscribeHosts();
+  
   DeviceCategory updateCategory(DeviceCategory category);
 
   void deleteZone(int zoneId);
@@ -82,6 +91,9 @@ public interface Service
 
   @RequestPath("categories")
   List<SelectItem> getCategoryItems();
+
+  @RequestPath("hostnames")
+  List<SelectItem> getHostnameItems();
 
   @RequestPath("device-classes")
   List<Class<? extends Device>> getDeviceClasses();
@@ -114,16 +126,16 @@ public interface Service
   // automata
 
   ActionDescriptor createActionCode(String actionDisplay) throws IOException;
-  
+
   void saveAction(ActionDescriptor action) throws IOException, ClassNotFoundException;
-  
+
   void removeAction(String actionClassName);
 
   void saveRule(Rule rule) throws ClassNotFoundException, IOException;
 
   void removeRule(String ruleName) throws IOException;
-  
+
   Set<ActionDescriptor> getActions();
-  
+
   Set<Rule> getRules();
 }

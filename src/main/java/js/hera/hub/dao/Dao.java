@@ -57,6 +57,8 @@ public interface Dao
 
   DeviceCategory getCategory(int categoryId);
 
+  Host getHost(int hostId);
+
   void createCategory(DeviceCategory category);
 
   void updateCategory(DeviceCategory category);
@@ -67,7 +69,11 @@ public interface Dao
 
   Host getHostByName(String hostName);
 
+  void createHost(Host host);
+
   void updateHost(Host host);
+
+  void deleteHost(int hostId);
 
   void clearHosts();
 

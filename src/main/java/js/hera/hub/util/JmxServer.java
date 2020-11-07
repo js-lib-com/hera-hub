@@ -1,4 +1,4 @@
-package js.hera.hub.impl;
+package js.hera.hub.util;
 
 import java.lang.management.ManagementFactory;
 import java.util.Set;
@@ -16,20 +16,11 @@ public class JmxServer
 {
   private static final Log log = LogFactory.getLog(JmxServer.class);
 
-  private static class Loader
-  {
-    static JmxServer instance = new JmxServer();
-  }
+  private final int port;
 
-  public static JmxServer getInstance()
+  public JmxServer()
   {
-    return Loader.instance;
-  }
-
-  private int port;
-
-  private JmxServer()
-  {
+    log.trace("JmxServer()");
     MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();
     String connectorPort;
     try {

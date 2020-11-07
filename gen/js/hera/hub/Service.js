@@ -220,6 +220,108 @@ js.hera.hub.Service = {
 	},
 
 	/**
+	 * Create host.
+	 *
+	 * @param js.hera.hub.model.Host host,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return js.hera.hub.model.Host
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 createHost: function(host) {
+		$assert(typeof host !== "undefined", "js.hera.hub.Service#createHost", "Host argument is undefined.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#createHost", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#createHost", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.hera.hub.Service", "createHost");
+		rmi.setParameters(host);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Update host.
+	 *
+	 * @param js.hera.hub.model.Host host,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return js.hera.hub.model.Host
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 updateHost: function(host) {
+		$assert(typeof host !== "undefined", "js.hera.hub.Service#updateHost", "Host argument is undefined.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#updateHost", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#updateHost", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.hera.hub.Service", "updateHost");
+		rmi.setParameters(host);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Delete host.
+	 *
+	 * @param int hostId,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return void
+	 * @assert callback is a {@link Function} and scope is an {@link Object}, if they are defined.
+	 * @note since method return type is void, callback, and hence scope too, is optional.
+	 */
+	 deleteHost: function(hostId) {
+		$assert(typeof hostId !== "undefined", "js.hera.hub.Service#deleteHost", "Host id argument is undefined.");
+		$assert(js.lang.Types.isNumber(hostId), "js.hera.hub.Service#deleteHost", "Host id argument is not a number.");
+
+		var __callback__ = arguments[1];
+		$assert(typeof __callback__ === "undefined" || js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#deleteHost", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#deleteHost", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.hera.hub.Service", "deleteHost");
+		rmi.setParameters(hostId);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Subscribe hosts.
+	 *
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return java.util.List<js.hera.hub.model.Host>
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 subscribeHosts: function() {
+		var __callback__ = arguments[0];
+		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#subscribeHosts", "Callback is not a function.");
+		var __scope__ = arguments[1];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#subscribeHosts", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.hera.hub.Service", "subscribeHosts");
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
 	 * Update category.
 	 *
 	 * @param js.hera.hub.model.DeviceCategory category,
@@ -487,6 +589,28 @@ js.hera.hub.Service = {
 
 		var rmi = new js.net.RMI();
 		rmi.setMethod("js.hera.hub.Service", "getCategoryItems");
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Get hostname items.
+	 *
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return java.util.List<js.hera.hub.model.SelectItem>
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 getHostnameItems: function() {
+		var __callback__ = arguments[0];
+		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#getHostnameItems", "Callback is not a function.");
+		var __scope__ = arguments[1];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#getHostnameItems", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.hera.hub.Service", "getHostnameItems");
 		rmi.exec(__callback__, __scope__);
 	},
 

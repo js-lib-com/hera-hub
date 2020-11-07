@@ -21,4 +21,10 @@ public class SelectItem
     this.value = Integer.toString(category.getId());
     this.text = category.getDisplay();
   }
+
+  public SelectItem(Host host)
+  {
+    this.value = Integer.toString(host.getId());
+    this.text = host.getDisplay();
+  }
 }

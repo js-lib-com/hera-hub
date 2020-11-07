@@ -1,4 +1,4 @@
-package js.hera;
+package js.hera.hub;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +38,8 @@ public class Application extends App
   {
     super.postConstruct();
     automata.postConstruct();
+    Service service = context.getInstance(Service.class);
+    this.automata.setDeviceActionHandler(service);
   }
 
   @Override

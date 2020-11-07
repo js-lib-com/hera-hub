@@ -1,11 +1,10 @@
-package js.hera.hub.impl;
+package js.hera.hub.util;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -29,16 +28,6 @@ public final class NetInterfaces
   /** Class logger. */
   private static final Log log = LogFactory.getLog(NetInterfaces.class);
 
-  private static class Loader
-  {
-    static NetInterfaces instance = new NetInterfaces();
-  }
-
-  public static NetInterfaces getInstance()
-  {
-    return Loader.instance;
-  }
-
   /** Network interfaces list. Does not contain local loopback. */
   private final List<NetInterfaces.NetInterface> netInterfaces = new ArrayList<NetInterfaces.NetInterface>();
 
@@ -48,8 +37,9 @@ public final class NetInterfaces
    * Scan host system interfaces and initialize internal network interfaces list. See {@link NetInterface} for relevant
    * structure.
    */
-  private NetInterfaces()
+  public NetInterfaces()
   {
+    log.trace("NetInterfaces()");
     scanNetInterfaces();
   }
 
@@ -79,13 +69,13 @@ public final class NetInterfaces
     bytes[index / 8] &= ~(1 << (index % 8));
   }
 
-  public String getInterfaceAddress(URL remoteHostURL)
+  public String getInterfaceAddress(String hostName)
   {
     try {
-      return getInterfaceAddress(InetAddress.getByName(remoteHostURL.getHost()));
+      return getInterfaceAddress(InetAddress.getByName(hostName));
     }
     catch(UnknownHostException e) {
-      log.warn("Unknown host for remote host URL |%s|.", remoteHostURL);
+      log.warn("Unknown host for remote host |%s|.", hostName);
     }
     return null;
   }
@@ -94,17 +84,17 @@ public final class NetInterfaces
    * Get IP address of the network interface able to route datagram to given remote IP address. Return null if requested
    * <code>ipAddress</code> is not on local site.
    * 
-   * @param ipAddress IP address on remote host.
+   * @param hostAddress IP address on remote host.
    * @return local IP address or null.
    */
-  public String getInterfaceAddress(InetAddress ipAddress)
+  public String getInterfaceAddress(InetAddress hostAddress)
   {
     int bytesIndex = 0;
     int tries = 2;
 
     while(tries-- > 0) {
       for(NetInterfaces.NetInterface netInterface : netInterfaces) {
-        byte[] ipBytes = ipAddress.getAddress();
+        byte[] ipBytes = hostAddress.getAddress();
         assert ipBytes.length == netInterface.bytesCount;
 
         for(bytesIndex = 0;; ++bytesIndex) {
@@ -117,11 +107,11 @@ public final class NetInterfaces
         }
       }
 
-      log.debug("No network interface found for IP address |%s|. Rescan host network interfaces.", ipAddress);
+      log.debug("No network interface found for IP address |%s|. Rescan host network interfaces.", hostAddress);
       scanNetInterfaces();
     }
 
-    log.debug("No network interface found for IP address |%s|.", ipAddress);
+    log.debug("No network interface found for IP address |%s|.", hostAddress);
     return null;
   }
 

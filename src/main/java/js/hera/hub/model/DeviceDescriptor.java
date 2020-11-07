@@ -1,16 +1,18 @@
 package js.hera.hub.model;
 
-import java.net.URL;
-
 import js.hera.dev.Device;
+import js.hera.hub.dao.Dao;
+import js.hera.hub.dao.PostLoad;
+import js.tiny.container.core.AppContext;
 
-public class DeviceDescriptor
+public class DeviceDescriptor implements PostLoad
 {
   /** ID used internally by persistence logic. */
   private int id;
 
   private int zoneId;
   private int categoryId;
+  private int hostId;
 
   /** Device unique name, used to identify device instance into HERA scope. */
   private String name;
@@ -20,16 +22,28 @@ public class DeviceDescriptor
   /** Device class describe actions supported by a certain device instance. */
   private Class<? extends Device> deviceClass;
 
-  /** URL of the target host context where device instance is deployed. */
-  private transient URL hostURL;
+  private transient String hostname;
+  private transient String hostDisplay;
 
   public void update(DeviceDescriptor device)
   {
     this.zoneId = device.zoneId;
     this.categoryId = device.categoryId;
+    this.hostId = device.hostId;
     this.name = device.name;
     this.display = device.display;
     this.deviceClass = device.deviceClass;
+  }
+
+  @Override
+  public void postLoad(AppContext context)
+  {
+    Dao dao = context.getInstance(Dao.class);
+    Host host = dao.getHost(hostId);
+    if(host != null) {
+      hostname = host.getName();
+      hostDisplay = host.getDisplay();
+    }
   }
 
   public int getId()
@@ -45,6 +59,21 @@ public class DeviceDescriptor
   public int getCategoryId()
   {
     return categoryId;
+  }
+
+  public int getHostId()
+  {
+    return hostId;
+  }
+
+  public String getHostname()
+  {
+    return hostname;
+  }
+
+  public String getHostDisplay()
+  {
+    return hostDisplay;
   }
 
   public String getName()
@@ -75,22 +104,6 @@ public class DeviceDescriptor
   public void setDeviceClass(Class<? extends Device> deviceClass)
   {
     this.deviceClass = deviceClass;
-  }
-
-  public URL getHostURL()
-  {
-    return hostURL;
-  }
-
-  public void setHostURL(URL hostURL)
-  {
-    this.hostURL = hostURL;
-  }
-
-  public boolean isDeviceActive()
-  {
-    // uses host system URL to detect if device is active
-    return hostURL != null;
   }
 
   @Override

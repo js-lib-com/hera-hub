@@ -1,38 +1,15 @@
 package js.hera.hub.model;
 
-import java.net.URL;
-
-import js.hera.HostAdvertise;
-
 public class Host
 {
   private int id;
   private String name;
-  private URL url;
+  private String display;
+  private int devicesCount;
+  private boolean active = true;
 
   public Host()
   {
-  }
-
-  public Host(HostAdvertise hostAdvertise)
-  {
-    name = hostAdvertise.getHostName();
-    url = hostAdvertise.getHostURL();
-  }
-
-  public void update(HostAdvertise hostAdvertise)
-  {
-    url = hostAdvertise.getHostURL();
-  }
-
-  public URL getURL()
-  {
-    return url;
-  }
-
-  public void setURL(URL url)
-  {
-    this.url = url;
   }
 
   public String getName()
@@ -48,6 +25,31 @@ public class Host
   public int getId()
   {
     return id;
+  }
+
+  public String getDisplay()
+  {
+    return display;
+  }
+
+  public int getDevicesCount()
+  {
+    return devicesCount;
+  }
+
+  public void setDevicesCount(int devicesCount)
+  {
+    this.devicesCount = devicesCount;
+  }
+
+  public void setActive(boolean active)
+  {
+    this.active = active;
+  }
+
+  public boolean isActive()
+  {
+    return active;
   }
 
   @Override

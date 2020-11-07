@@ -3,14 +3,40 @@
 		<tr>
 			<td>ID</td>
 			<td>Name</td>
-			<td>URL</td>
+			<td>Display</td>
+			<td>State</td>
 			<td class="spare"></td>
 		</tr>
 		<tr>
 			<td data-text="id"></td>
 			<td data-text="name"></td>
-			<td data-text="url"></td>
+			<td data-text="display"></td>
+			<td data-text="active"></td>
 			<td></td>
 		</tr>
 	</table>
+
+	<div class="button-bar">
+		<button name="create">Create</button>
+		<button name="edit">Edit</button>
+		<button name="remove">Remove</button>
+		<button name="subscribe">Subscribe</button>
+	</div>
+	
+	<div data-name="dialog" class="dialog hidden">
+		<form class="category">
+			<fieldset>
+				<label>Name</label>
+				<input name="name" placeholder="host-name" />
+				<br />
+				<label>Display</label>
+				<input name="display" placeholder="display-name" />
+			</fieldset>
+		</form>
+		
+		<div class="button-bar">
+			<button name="save">Save</button>
+			<button name="cancel">Cancel</button>
+		</div>
+	</div>
 </section>

@@ -4,6 +4,7 @@
 			<td>ID</td>
 			<td>Zone</td>
 			<td>Category</td>
+			<td>Host</td>
 			<td>Name</td>
 			<td>Display</td>
 			<td>Class</td>
@@ -13,6 +14,7 @@
 			<td data-text="id"></td>
 			<td data-text="zoneDisplay"></td>
 			<td data-text="categoryDisplay"></td>
+			<td data-text="hostDisplay"></td>
 			<td data-text="name"></td>
 			<td data-text="display"></td>
 			<td data-text="deviceClass"></td>
@@ -34,6 +36,9 @@
 				<br />
 				<label>Category</label>
 				<select name="categoryId" data-load="rest/categories"></select>
+				<br /> 
+				<label>Host</label>
+				<select name="hostId" data-load="rest/hostnames"></select>
 				<br /> 
 				<label>Class</label>
 				<select name="deviceClass" data-load="rest/device-classes"></select>

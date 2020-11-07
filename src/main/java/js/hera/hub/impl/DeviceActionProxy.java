@@ -4,5 +4,5 @@ import js.hera.hub.model.DeviceDescriptor;
 
 public interface DeviceActionProxy
 {
-  Object exec(DeviceDescriptor descriptor, String actionName, Object... arguments) throws Exception;
+  Object exec(String hostname, DeviceDescriptor descriptor, String actionName, Object... arguments) throws Exception;
 }

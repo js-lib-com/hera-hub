@@ -14,9 +14,9 @@ js.hera.CategoriesPage = function() {
 	this.$super();
 	Service.getCategories(this._onCategories, this);
 
-	this._doRemove = Service.deleteCategory;
 	this._doCreate = Service.createCategory;
 	this._doUpdate = Service.updateCategory;
+	this._doRemove = Service.deleteCategory;
 };
 
 js.hera.CategoriesPage.prototype = {

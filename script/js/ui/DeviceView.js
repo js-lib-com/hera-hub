@@ -2,36 +2,28 @@ $package("js.ui");
 
 $include("js.hera.hub.Service");
 
-js.ui.DeviceView = function(ownerDoc, node) {
+js.ui.DeviceView = function (ownerDoc, node) {
 	this.$super(ownerDoc, node);
 };
 
 js.ui.DeviceView.prototype = {
-	setDevice : function(device) {
+	setDevice: function (device) {
 		this._device = device;
 		this.setObject(device);
 
 		switch (device.deviceClass) {
-		case "js.hera.dev.BinaryLight":
-		case "js.hera.dev.Actuator":
-			this._getState(function(state) {
-				if (state === null) {
-					this.addCssClass("disabled")
-				}
-				else {
-					this.removeCssClass("disabled")
-					this.addCssClass("active", state);
-				}
-			}, this);
-			this.on("click", this._onClick, this);
-			break;
+			case "js.hera.dev.BinaryLight":
+			case "js.hera.dev.Actuator":
+				this._getState(this.updateState, this);
+				this.on("click", this._onClick, this);
+				break;
 
-		default:
-			break;
+			default:
+				break;
 		}
 	},
 
-	updateState : function(state) {
+	updateState: function (state) {
 		if (state === null) {
 			this.addCssClass("disabled")
 		}
@@ -42,37 +34,42 @@ js.ui.DeviceView.prototype = {
 		this.removeCssClass("pending");
 	},
 
-	_onClick : function(ev) {
+	_onClick: function (ev) {
 		navigator.vibrate(100);
 		this.addCssClass("pending");
-		this._getState(function(state) {
+		this._getState(function (state) {
+			if (state === null) {
+				this.addCssClass("disabled");
+				return;
+			}
+			this.removeCssClass("disabled")
+			this.addCssClass("active", !state);
 			if (state) {
 				this._turnOFF();
-				// this.removeCssClass("active");
 			}
 			else {
 				this._turnON();
-				// this.addCssClass("active");
 			}
 		}, this);
 	},
 
-	_getState : function(callback, scope) {
+	_getState: function (callback, scope) {
 		Service.invokeDeviceAction(this._device.name, "getState", [], callback, scope);
 	},
 
-	_turnON : function() {
+	_turnON: function () {
 		Service.invokeDeviceAction(this._device.name, "turnON", [], this._callback, this);
 	},
 
-	_turnOFF : function() {
+	_turnOFF: function () {
 		Service.invokeDeviceAction(this._device.name, "turnOFF", [], this._callback, this);
 	},
 
-	_callback : function() {
+	_callback: function () {
+		this.removeCssClass("pending");
 	},
 
-	toString : function() {
+	toString: function () {
 		return "js.ui.DeviceView";
 	}
 };
