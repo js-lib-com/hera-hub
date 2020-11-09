@@ -100,6 +100,10 @@ final class ServiceImpl implements Service
       return null;
     }
     Host host = dao.getHost(descriptor.getHostId());
+    if(host == null) {
+      log.warn("Not configured host. Device |%s| is unreachable.", descriptor.getName());
+      return null;
+    }
     if(!host.isActive()) {
       log.warn("Inactive host |%s|. Device |%s| is unreachable.", host.getName(), descriptor.getName());
       return null;

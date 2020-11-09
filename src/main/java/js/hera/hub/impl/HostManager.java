@@ -63,6 +63,7 @@ public class HostManager extends AbstractLooper
 
   private boolean subscribe(String hostName)
   {
+    hostName += ".local";
     log.trace("subscribeDeviceHostSystem(String): %s", hostName);
 
     // http://192.168.0.3:8080/hera/js/hera/hub/impl/MessageBroker/publish.rmi
