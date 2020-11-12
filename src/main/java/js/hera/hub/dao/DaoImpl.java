@@ -60,7 +60,7 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
   {
     log.trace("preDestroy()");
     userStore.save();
-    // hostStore.save();
+    hostStore.save();
     zoneStore.save();
     categoryStore.save();
     deviceStore.save();

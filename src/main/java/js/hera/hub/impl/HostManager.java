@@ -24,7 +24,6 @@ public class HostManager extends AbstractLooper
   private final Dao dao;
   private final JmxServer jmxServer;
   private final NetInterfaces netInterfaces;
-  private final List<Host> hosts;
 
   protected HostManager(AppContext context)
   {
@@ -35,8 +34,6 @@ public class HostManager extends AbstractLooper
     this.dao = context.getInstance(Dao.class);
     this.jmxServer = context.getInstance(JmxServer.class);
     this.netInterfaces = context.getInstance(NetInterfaces.class);
-
-    this.hosts = dao.getHosts();
   }
 
   @Override
@@ -48,6 +45,7 @@ public class HostManager extends AbstractLooper
 
   public List<Host> subscribe()
   {
+    List<Host> hosts = dao.getHosts();
     for(Host host : hosts) {
       host.setActive(subscribe(host.getName()));
       dao.updateHost(host);
