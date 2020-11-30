@@ -14,4 +14,5 @@
 		
 		<push-stream class="js.hera.hub.impl.DeviceEventStream" interface="js.tiny.container.net.EventStream" scope="LOCAL" />
 	</managed-classes>
+	<observer period="60000" />
 </app>
