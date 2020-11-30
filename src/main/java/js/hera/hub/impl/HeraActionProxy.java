@@ -2,13 +2,19 @@ package js.hera.hub.impl;
 
 import js.hera.hub.model.DeviceDescriptor;
 import js.lang.Callback;
+import js.log.Log;
+import js.log.LogFactory;
 import js.net.client.HttpRmiTransaction;
 import js.util.Strings;
 
 public class HeraActionProxy implements DeviceActionProxy
 {
+  private static final Log log = LogFactory.getLog(HeraActionProxy.class);
+
   public Object exec(String hostname, DeviceDescriptor descriptor, String actionName, Object... arguments) throws Exception
   {
+    log.trace("exec(String hostname, DeviceDescriptor descriptor, String actionName, Object... arguments)");
+    
     HttpRmiTransaction rmi = HttpRmiTransaction.getInstance(Strings.concat("http://", descriptor.getHostname(), ".local"));
     rmi.setConnectionTimeout(4000);
     rmi.setReadTimeout(8000);
