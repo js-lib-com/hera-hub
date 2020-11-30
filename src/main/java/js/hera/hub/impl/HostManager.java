@@ -2,7 +2,6 @@ package js.hera.hub.impl;
 
 import java.util.List;
 
-import js.hera.auto.util.Files;
 import js.hera.hub.MessageBroker;
 import js.hera.hub.dao.Dao;
 import js.hera.hub.model.Host;
@@ -13,6 +12,7 @@ import js.lang.AbstractLooper;
 import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.container.core.AppContext;
+import js.util.Files;
 
 public class HostManager extends AbstractLooper
 {

@@ -3,8 +3,9 @@ package js.hera.hub;
 import java.io.File;
 import java.io.IOException;
 
-import js.hera.auto.engine.Automata;
-import js.hera.auto.engine.AutomataImpl;
+import com.jslib.automata.Automata;
+import com.jslib.automata.AutomataImpl;
+
 import js.tiny.container.core.App;
 import js.tiny.container.core.AppContext;
 import js.util.Strings;

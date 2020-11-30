@@ -923,7 +923,7 @@ js.hera.hub.Service = {
 	 * @param java.lang.String actionDisplay,
 	 * @param Function callback function to invoke on RMI completion,
 	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return js.hera.auto.engine.ActionDescriptor
+	 * @return com.jslib.automata.ActionDescriptor
 	 * @throws java.io.IOException
 	 * @assert callback is a {@link Function} and scope is an {@link Object}.
 	 */
@@ -948,7 +948,7 @@ js.hera.hub.Service = {
 	/**
 	 * Save action.
 	 *
-	 * @param js.hera.auto.engine.ActionDescriptor action,
+	 * @param com.jslib.automata.ActionDescriptor action,
 	 * @param Function callback function to invoke on RMI completion,
 	 * @param Object scope optional callback run-time scope, default to global scope.
 	 * @return void
@@ -1005,7 +1005,7 @@ js.hera.hub.Service = {
 	/**
 	 * Save rule.
 	 *
-	 * @param js.hera.auto.engine.Rule rule,
+	 * @param com.jslib.automata.Rule rule,
 	 * @param Function callback function to invoke on RMI completion,
 	 * @param Object scope optional callback run-time scope, default to global scope.
 	 * @return void
@@ -1065,7 +1065,7 @@ js.hera.hub.Service = {
 	 *
 	 * @param Function callback function to invoke on RMI completion,
 	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return java.util.Set<js.hera.auto.engine.ActionDescriptor>
+	 * @return java.util.Set<com.jslib.automata.ActionDescriptor>
 	 * @assert callback is a {@link Function} and scope is an {@link Object}.
 	 */
 	 getActions: function() {
@@ -1087,7 +1087,7 @@ js.hera.hub.Service = {
 	 *
 	 * @param Function callback function to invoke on RMI completion,
 	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return java.util.Set<js.hera.auto.engine.Rule>
+	 * @return java.util.Set<com.jslib.automata.Rule>
 	 * @assert callback is a {@link Function} and scope is an {@link Object}.
 	 */
 	 getRules: function() {

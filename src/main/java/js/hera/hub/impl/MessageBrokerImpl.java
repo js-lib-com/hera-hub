@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import js.hera.auto.engine.Automata;
+import com.jslib.automata.Automata;
+
 import js.hera.hub.Application;
 import js.hera.hub.DeviceState;
 import js.hera.hub.Message;

@@ -7,9 +7,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import js.hera.auto.engine.ActionDescriptor;
-import js.hera.auto.engine.Automata;
-import js.hera.auto.engine.Rule;
+import com.jslib.automata.ActionDescriptor;
+import com.jslib.automata.Automata;
+import com.jslib.automata.Rule;
+
 import js.hera.dev.Actuator;
 import js.hera.dev.BinaryLight;
 import js.hera.dev.ColorLED;

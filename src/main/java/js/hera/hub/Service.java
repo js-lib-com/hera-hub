@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import js.hera.auto.engine.ActionDescriptor;
-import js.hera.auto.engine.DeviceActionHandler;
-import js.hera.auto.engine.Rule;
+import com.jslib.automata.ActionDescriptor;
+import com.jslib.automata.DeviceActionHandler;
+import com.jslib.automata.Rule;
+
 import js.hera.dev.Device;
 import js.hera.hub.model.DeviceCategory;
 import js.hera.hub.model.DeviceDTO;

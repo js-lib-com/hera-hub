@@ -1,5 +1,7 @@
 package js.hera.auto.engine;
 
+import com.jslib.automata.DeviceAction;
+
 public class TemperatureSensor extends DeviceAction
 {
   private double thermostatSensorValue;
