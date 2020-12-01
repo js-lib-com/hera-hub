@@ -29,7 +29,7 @@ public class DHTSensorStressTest extends StressTest
 
   protected int getTestsCount()
   {
-    return 100000;
+    return 10;
   }
 
   protected void onResult(String result)

@@ -6,7 +6,7 @@ public class ActuatorStressTest extends StressTest
 {
   protected int getTestsCount()
   {
-    return 10000;
+    return 10;
   }
 
   @Test

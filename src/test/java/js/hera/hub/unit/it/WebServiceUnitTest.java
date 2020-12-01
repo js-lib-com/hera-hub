@@ -2,6 +2,8 @@ package js.hera.hub.unit.it;
 
 import java.io.File;
 
+import org.junit.Ignore;
+
 import js.hera.hub.client.DeviceFactory;
 import js.hera.hub.client.Service;
 import js.hera.hub.client.SetpointThermostat;
@@ -10,6 +12,7 @@ import js.tiny.container.core.Factory;
 import js.tiny.container.unit.TestContext;
 import junit.framework.TestCase;
 
+@Ignore
 public class WebServiceUnitTest extends TestCase
 {
   @Override

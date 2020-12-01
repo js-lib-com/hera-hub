@@ -6,7 +6,7 @@ public class TemperatureSensor extends DeviceAction
 {
   private double thermostatSensorValue;
 
-  protected void update() throws Exception
+  protected void update()
   {
     System.out.printf("Thermostat Sensor Value: %.02f\n", thermostatSensorValue);
 
