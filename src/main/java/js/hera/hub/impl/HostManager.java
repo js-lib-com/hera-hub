@@ -70,7 +70,7 @@ public class HostManager extends AbstractLooper
     messageBrokerURL.append("http://");
     messageBrokerURL.append(netInterfaces.getInterfaceAddress(hostName));
     messageBrokerURL.append(':');
-    messageBrokerURL.append(jmxServer.getPort());
+    messageBrokerURL.append(8080);
     messageBrokerURL.append('/');
 
     messageBrokerURL.append(context.getAppName());
