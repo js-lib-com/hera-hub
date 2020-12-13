@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Point;
+
 import com.jslib.automata.Automata;
 
 import js.hera.hub.Application;
@@ -24,11 +28,14 @@ class MessageBrokerImpl implements MessageBroker
 
   private final Automata automata;
   private final List<EventStream> streams = Collections.synchronizedList(new ArrayList<EventStream>());
+  private final InfluxDB influx;
 
   public MessageBrokerImpl(AppContext context)
   {
     log.trace("EventBrokerImpl(AppContext)");
     this.automata = ((Application)context.getInstance(App.class)).getAutomata();
+    this.influx = InfluxDBFactory.connect("http://localhost:8086/");
+    this.influx.setDatabase("hera");
   }
 
   void bindStream(EventStream stream)
@@ -55,6 +62,9 @@ class MessageBrokerImpl implements MessageBroker
     case DEVICE_STATE:
       final DeviceState deviceState = message.value();
       log.debug("Device state: device name |%s|, value |%f|.", deviceState.getDeviceName(), deviceState.getValue());
+
+      Point point = Point.measurement(deviceState.getDeviceName()).addField("value", deviceState.getValue()).build();
+      influx.write(point);
 
       // handle automata event
       Map<String, String> event = new HashMap<>();
