@@ -18,6 +18,7 @@ import js.hera.hub.Message;
 import js.hera.hub.MessageBroker;
 import js.log.Log;
 import js.log.LogFactory;
+import js.tiny.container.annotation.ContextParam;
 import js.tiny.container.core.App;
 import js.tiny.container.core.AppContext;
 import js.tiny.container.net.EventStream;
@@ -25,6 +26,9 @@ import js.tiny.container.net.EventStream;
 class MessageBrokerImpl implements MessageBroker
 {
   private static final Log log = LogFactory.getLog(MessageBrokerImpl.class);
+
+  @ContextParam(value = "influx.url", mandatory = false)
+  private static String INFLUX_URL;
 
   private final Automata automata;
   private final List<EventStream> streams = Collections.synchronizedList(new ArrayList<EventStream>());
@@ -34,8 +38,14 @@ class MessageBrokerImpl implements MessageBroker
   {
     log.trace("EventBrokerImpl(AppContext)");
     this.automata = ((Application)context.getInstance(App.class)).getAutomata();
-    this.influx = InfluxDBFactory.connect("http://localhost:8086/");
-    this.influx.setDatabase("hera");
+
+    if(INFLUX_URL != null) {
+      this.influx = InfluxDBFactory.connect(INFLUX_URL);
+      this.influx.setDatabase("hera");
+    }
+    else {
+      this.influx = null;
+    }
   }
 
   void bindStream(EventStream stream)
@@ -63,8 +73,10 @@ class MessageBrokerImpl implements MessageBroker
       final DeviceState deviceState = message.value();
       log.debug("Device state: device name |%s|, value |%f|.", deviceState.getDeviceName(), deviceState.getValue());
 
-      Point point = Point.measurement(deviceState.getDeviceName()).addField("value", deviceState.getValue()).build();
-      influx.write(point);
+      if(influx != null) {
+        Point point = Point.measurement(deviceState.getDeviceName()).addField("value", deviceState.getValue()).build();
+        influx.write(point);
+      }
 
       // handle automata event
       Map<String, String> event = new HashMap<>();

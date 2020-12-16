@@ -41,6 +41,7 @@ public interface Service extends DeviceActionHandler
    * @return action return value.
    * @throws Exception
    */
+  @RequestPath("invoke")
   Object invokeDeviceAction(String deviceName, String actionName, Object... args) throws Exception;
 
   // ------------------------------------------------------
