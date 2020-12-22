@@ -85,7 +85,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.js-lib</groupId>
+			<groupId>js.hera</groupId>
 			<artifactId>hera-device</artifactId>
 			<version>1.0.0</version>
 		</dependency>
