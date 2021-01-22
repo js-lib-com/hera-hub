@@ -22,6 +22,7 @@ import js.hera.dev.LightSensor;
 import js.hera.dev.MotionLight;
 import js.hera.dev.PowerMeter;
 import js.hera.dev.RadioSwitch;
+import js.hera.dev.RollerBlinds;
 import js.hera.dev.TemperatureSensor;
 import js.hera.dev.Thermostat;
 import js.hera.dev.ThermostatSensor;
@@ -322,6 +323,7 @@ final class ServiceImpl implements Service
     DEVICE_CLASSES.add(TemperatureSensor.class);
     DEVICE_CLASSES.add(Thermostat.class);
     DEVICE_CLASSES.add(ThermostatSensor.class);
+    DEVICE_CLASSES.add(RollerBlinds.class);
   }
 
   @Override
