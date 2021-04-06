@@ -1,6 +1,8 @@
 package js.hera.hub.impl;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import js.hera.hub.MessageBroker;
 import js.hera.hub.dao.Dao;
@@ -24,6 +26,7 @@ public class HostManager extends AbstractLooper
   private final Dao dao;
   private final JmxServer jmxServer;
   private final NetInterfaces netInterfaces;
+  private final Timer timer = new Timer("SubscribeTimer");
 
   protected HostManager(AppContext context)
   {
@@ -41,6 +44,16 @@ public class HostManager extends AbstractLooper
   {
     super.postConstruct();
     subscribe();
+
+    long delay = 5 * 60 * 1000;
+    timer.schedule(new TimerTask()
+    {
+      @Override
+      public void run()
+      {
+        subscribe();
+      }
+    }, delay);
   }
 
   public List<Host> subscribe()
