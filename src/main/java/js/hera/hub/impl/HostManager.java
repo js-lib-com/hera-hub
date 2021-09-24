@@ -7,7 +7,6 @@ import java.util.TimerTask;
 import js.hera.hub.MessageBroker;
 import js.hera.hub.dao.Dao;
 import js.hera.hub.model.Host;
-import js.hera.hub.util.JmxServer;
 import js.hera.hub.util.NetInterfaces;
 import js.hera.hub.util.RMI;
 import js.lang.AbstractLooper;
@@ -24,7 +23,6 @@ public class HostManager extends AbstractLooper
 
   private final AppContext context;
   private final Dao dao;
-  private final JmxServer jmxServer;
   private final NetInterfaces netInterfaces;
   private final Timer timer = new Timer("SubscribeTimer");
 
@@ -35,7 +33,6 @@ public class HostManager extends AbstractLooper
 
     this.context = context;
     this.dao = context.getInstance(Dao.class);
-    this.jmxServer = context.getInstance(JmxServer.class);
     this.netInterfaces = context.getInstance(NetInterfaces.class);
   }
 

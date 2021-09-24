@@ -1,7 +1,7 @@
 package js.hera.hub.unit;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
