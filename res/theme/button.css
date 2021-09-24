@@ -1,6 +1,11 @@
 .button-bar {
 	display: block;
-	margin-top: @dimen/section-space;
+	margin-top: 30px;
+}
+
+.dialog .button-bar {
+	margin-top: 0;	
+	padding: 0 12px 12px;
 }
 
 button {

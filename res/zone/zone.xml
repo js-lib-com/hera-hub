@@ -1,0 +1,7 @@
+<page>
+	<title>zone</title>
+	<script src="gen/js/hera/hub/Service.js"></script>
+	<script src="lib/table-view/table-view.js"></script>
+	<script src="script/js/hera/TablePage.js"></script>
+	<script src="script/js/hera/ZonesPage.js"></script>
+</page>

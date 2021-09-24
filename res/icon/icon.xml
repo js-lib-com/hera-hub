@@ -1,0 +1,5 @@
+<page>
+	<title>icon</title>
+	<script src="gen/js/hera/hub/Service.js"></script>
+	<script src="script/js/hera/IconsPage.js"></script>
+</page>

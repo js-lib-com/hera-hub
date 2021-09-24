@@ -20,6 +20,7 @@ import js.hera.dev.Device;
 import js.hera.dev.LightDimmer;
 import js.hera.dev.LightSensor;
 import js.hera.dev.MotionLight;
+import js.hera.dev.NeoPixel;
 import js.hera.dev.PowerMeter;
 import js.hera.dev.RadioSwitch;
 import js.hera.dev.RollerBlinds;
@@ -313,6 +314,7 @@ final class ServiceImpl implements Service
     DEVICE_CLASSES.add(Actuator.class);
     DEVICE_CLASSES.add(BinaryLight.class);
     DEVICE_CLASSES.add(ColorLED.class);
+    DEVICE_CLASSES.add(NeoPixel.class);
     DEVICE_CLASSES.add(ContactSwitch.class);
     DEVICE_CLASSES.add(DHTSensor.class);
     DEVICE_CLASSES.add(LightDimmer.class);

@@ -3,6 +3,10 @@
 	border-collapse: collapse;
 }
 
+.js-widget-tableview td {
+	padding: 5px 10px;
+}
+
 .js-widget-tableview thead td {
 	background-color: #888;
 	background: linear-gradient(#999, #666, #888);

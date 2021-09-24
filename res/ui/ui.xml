@@ -1,0 +1,17 @@
+<page>
+	<title>ui</title>
+	<script src="gen/js/hera/hub/Service.js"></script>
+	<script src="script/js/ui/Panorama.js"></script>
+	<script src="script/js/ui/DevicesLayout.js"></script>
+	<script src="script/js/ui/DeviceView.js"></script>
+	<script src="script/js/ui/TemperatureSensorView.js"></script>
+	<script src="script/js/ui/ThermostatDialog.js"></script>
+	<script src="script/js/ui/ThermostatView.js"></script>
+	<script src="script/js/ui/ColorLedDialog.js"></script>
+	<script src="script/js/ui/ColorLedTile.js"></script>
+	<script src="script/js/ui/DHTSensorView.js"></script>
+	<script src="script/js/ui/LightDimmerDialog.js"></script>
+	<script src="script/js/ui/LightDimmerTile.js"></script>
+	<script src="script/js/ui/PowerMeterView.js"></script>
+	<script src="script/js/ui/Page.js"></script>
+</page>

@@ -14,6 +14,7 @@ js.ui.DevicesLayout.prototype = {
 		"js.hera.dev.RadioSwitch" : "js.ui.DeviceView",
 		"js.hera.dev.LightDimmer" : "js.ui.LightDimmerTile",
 		"js.hera.dev.ColorLED" : "js.ui.ColorLedTile",
+		"js.hera.dev.NeoPixel" : "js.ui.ColorLedTile",
 		"js.hera.dev.Thermostat" : "js.ui.ThermostatView",
 		"js.hera.dev.ThermostatSensor" : "js.ui.TemperatureSensorView",
 		"js.hera.dev.DHTSensor" : "js.ui.DHTSensorView",

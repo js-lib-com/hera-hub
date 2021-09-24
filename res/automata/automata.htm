@@ -1,4 +1,4 @@
-<section w:template="page#body" class="automata" w:script="js.hera.AutomataPage" xmlns:w="js-lib.com/wood">
+<section w:template="res/page#body" class="automata" xmlns:w="js-lib.com/wood">
 	<h1>Actions</h1>
 	<div data-name="actions-list-view" data-class="js.widget.ListControl" class="js-widget-listcontrol large-icons">
   		<ul class="list clear-after" data-list=".">
@@ -57,10 +57,10 @@
 		<form>
 			<fieldset>
 				<label>Name</label>
-				<input name="name" placeholder="rule-name" />
+				<input name="name" placeholder="rule-name" type="text" />
 				<br />
 				<label>Display</label>
-				<input name="display" placeholder="Rule Name" />
+				<input name="display" placeholder="Rule Name" type="text" />
 				<br />
 				<label>Icon</label>
 				<select name="icon"></select>
@@ -75,10 +75,10 @@
 				<select name="events.0.deviceName"></select>
 				<br />
 				<label>Parameter #1</label>
-				<input name="events.0.parameters.0" placeholder="humidity" class="optional" />
+				<input name="events.0.parameters.0" placeholder="humidity" type="text" class="optional" />
 				<br />
 				<label>Parameter #2</label>
-				<input name="events.0.parameters.1" placeholder="temperature" class="optional" />
+				<input name="events.0.parameters.1" placeholder="temperature" type="text" class="optional" />
 			</fieldset>
 			
 			<fieldset>
@@ -87,10 +87,10 @@
 				<select name="events.1.deviceName" class="optional"></select>
 				<br />
 				<label>Parameter #1</label>
-				<input name="events.1.parameters.0" placeholder="humidity" class="optional" />
+				<input name="events.1.parameters.0" placeholder="humidity" type="text" class="optional" />
 				<br />
 				<label>Parameter #2</label>
-				<input name="events.1.parameters.1" placeholder="temperature" class="optional" />
+				<input name="events.1.parameters.1" placeholder="temperature" type="text" class="optional" />
 			</fieldset>
 		</form>
 		<div class="button-bar">

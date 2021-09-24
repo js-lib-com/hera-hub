@@ -1,10 +1,14 @@
 package js.hera.hub;
 
-import js.tiny.container.annotation.Service;
-import js.tiny.container.annotation.Public;
+import javax.annotation.ManagedBean;
+import javax.annotation.security.PermitAll;
+import javax.ejb.Remote;
+import javax.ws.rs.Path;
 
-@Service("broker")
-@Public
+@ManagedBean
+@PermitAll
+@Path("broker")
+@Remote
 public interface MessageBroker
 {
   void publish(Message message);

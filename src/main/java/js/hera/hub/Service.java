@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.security.PermitAll;
+import javax.ejb.Remote;
+import javax.ws.rs.Path;
+
 import com.jslib.automata.ActionDescriptor;
 import com.jslib.automata.DeviceActionHandler;
 import com.jslib.automata.Rule;
@@ -18,13 +22,10 @@ import js.hera.hub.model.PowerMeterValue;
 import js.hera.hub.model.SelectItem;
 import js.hera.hub.model.SystemDescriptor;
 import js.hera.hub.model.Zone;
-import js.tiny.container.annotation.Public;
-import js.tiny.container.annotation.Remote;
-import js.tiny.container.annotation.RequestPath;
 import js.tiny.container.http.form.UploadedFile;
 
 @Remote
-@Public
+@PermitAll
 public interface Service extends DeviceActionHandler
 {
   // ------------------------------------------------------
@@ -41,7 +42,7 @@ public interface Service extends DeviceActionHandler
    * @return action return value.
    * @throws Exception
    */
-  @RequestPath("invoke")
+  @Path("invoke")
   Object invokeDeviceAction(String deviceName, String actionName, Object... args) throws Exception;
 
   // ------------------------------------------------------
@@ -66,7 +67,7 @@ public interface Service extends DeviceActionHandler
   void deleteHost(int hostId);
 
   List<Host> subscribeHosts();
-  
+
   DeviceCategory updateCategory(DeviceCategory category);
 
   void deleteZone(int zoneId);
@@ -88,19 +89,19 @@ public interface Service extends DeviceActionHandler
 
   List<DeviceDTO> getDevices();
 
-  @RequestPath("zones")
+  @Path("zones")
   List<SelectItem> getZoneItems();
 
-  @RequestPath("categories")
+  @Path("categories")
   List<SelectItem> getCategoryItems();
 
-  @RequestPath("hostnames")
+  @Path("hostnames")
   List<SelectItem> getHostnameItems();
 
-  @RequestPath("device-classes")
+  @Path("device-classes")
   List<Class<? extends Device>> getDeviceClasses();
 
-  @RequestPath("binary-lights")
+  @Path("binary-lights")
   List<String> getBinaryLights();
 
   List<DeviceDescriptor> getDevicesByCategoryName(String categoryName);
@@ -113,7 +114,7 @@ public interface Service extends DeviceActionHandler
 
   void uploadIcon(UploadedFile icon) throws IOException;
 
-  @RequestPath("icons")
+  @Path("icons")
   List<String> getIconNames();
 
   void updateIconName(String name, String newName);
