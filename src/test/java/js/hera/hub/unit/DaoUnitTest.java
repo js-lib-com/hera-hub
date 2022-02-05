@@ -17,12 +17,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import js.hera.hub.Application;
 import js.hera.hub.dao.DaoImpl;
 import js.hera.hub.model.User;
 import js.hera.hub.model.Zone;
-import js.json.Json;
-import js.tiny.container.core.AppContext;
-import js.util.Classes;
 import js.util.Files;
 
 /**
@@ -34,7 +32,7 @@ import js.util.Files;
 public class DaoUnitTest
 {
   @Mock
-  private AppContext context;
+  private Application context;
 
   /** DAO interface under test. */
   private DaoImpl dao;
@@ -53,8 +51,6 @@ public class DaoUnitTest
         return file(invocation.getArgument(0));
       }
     });
-
-    when(context.getInstance(Json.class)).thenReturn(Classes.loadService(Json.class));
 
     dao = new DaoImpl(context);
     dao.postConstruct();

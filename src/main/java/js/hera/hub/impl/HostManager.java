@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import jakarta.ejb.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import js.hera.hub.Application;
 import js.hera.hub.MessageBroker;
 import js.hera.hub.dao.Dao;
 import js.hera.hub.model.Host;
@@ -12,28 +16,30 @@ import js.hera.hub.util.RMI;
 import js.lang.AbstractLooper;
 import js.log.Log;
 import js.log.LogFactory;
-import js.tiny.container.core.AppContext;
 import js.util.Files;
 
+@ApplicationScoped
+@Startup
 public class HostManager extends AbstractLooper
 {
   private static final Log log = LogFactory.getLog(HostManager.class);
 
   private static final int LOOP_PERIOD = 60 * 1000;
 
-  private final AppContext context;
+  private final Application app;
   private final Dao dao;
   private final NetInterfaces netInterfaces;
   private final Timer timer = new Timer("SubscribeTimer");
 
-  protected HostManager(AppContext context)
+  @Inject
+  public HostManager(Application app, Dao dao, NetInterfaces netInterfaces)
   {
     super(LOOP_PERIOD);
-    log.trace("HostManager(AppContext)");
+    log.trace("HostManager(Application, Dao, NetInterfaces)");
 
-    this.context = context;
-    this.dao = context.getInstance(Dao.class);
-    this.netInterfaces = context.getInstance(NetInterfaces.class);
+    this.app = app;
+    this.dao = dao;
+    this.netInterfaces = netInterfaces;
   }
 
   @Override
@@ -74,7 +80,7 @@ public class HostManager extends AbstractLooper
     hostName += ".local";
     log.trace("subscribeDeviceHostSystem(String): %s", hostName);
 
-    // http://192.168.0.3:8080/hera/js/hera/hub/impl/MessageBroker/publish.rmi
+    // http://192.168.0.3:8080/hub/js/hera/hub/impl/MessageBroker/publish.rmi
 
     StringBuilder messageBrokerURL = new StringBuilder();
     messageBrokerURL.append("http://");
@@ -83,7 +89,7 @@ public class HostManager extends AbstractLooper
     messageBrokerURL.append(8080);
     messageBrokerURL.append('/');
 
-    messageBrokerURL.append(context.getAppName());
+    messageBrokerURL.append(app.getAppName());
     messageBrokerURL.append('/');
 
     messageBrokerURL.append(Files.dot2urlpath(MessageBroker.class.getName()));

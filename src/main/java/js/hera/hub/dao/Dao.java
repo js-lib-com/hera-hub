@@ -2,6 +2,7 @@ package js.hera.hub.dao;
 
 import java.util.List;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import js.hera.hub.model.DeviceCategory;
 import js.hera.hub.model.DeviceDescriptor;
 import js.hera.hub.model.Host;
@@ -13,6 +14,7 @@ import js.hera.hub.model.Zone;
  * 
  * @author Iulian Rotaru
  */
+@ApplicationScoped
 public interface Dao
 {
   User getUserById(int userId);

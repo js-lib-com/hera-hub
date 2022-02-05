@@ -3,7 +3,6 @@ package js.hera.hub.model;
 import js.hera.dev.Device;
 import js.hera.hub.dao.Dao;
 import js.hera.hub.dao.PostLoad;
-import js.tiny.container.core.AppContext;
 
 public class DeviceDescriptor implements PostLoad
 {
@@ -36,9 +35,8 @@ public class DeviceDescriptor implements PostLoad
   }
 
   @Override
-  public void postLoad(AppContext context)
+  public void postLoad(Dao dao)
   {
-    Dao dao = context.getInstance(Dao.class);
     Host host = dao.getHost(hostId);
     if(host != null) {
       hostname = host.getName();

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context reloadable="true">
+	<Parameter name="files.store" value="${catalina.base}/work/Applications/hub/" />
 	<Parameter name="influx.url" value="http://localhost:8086/" />
 </Context>

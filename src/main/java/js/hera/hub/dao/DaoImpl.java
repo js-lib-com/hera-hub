@@ -2,16 +2,17 @@ package js.hera.hub.dao;
 
 import java.util.List;
 
-import js.hera.hub.dao.Store.Predicate;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.inject.Inject;
+import js.hera.hub.Application;
 import js.hera.hub.model.DeviceCategory;
 import js.hera.hub.model.DeviceDescriptor;
 import js.hera.hub.model.Host;
 import js.hera.hub.model.User;
 import js.hera.hub.model.Zone;
-import js.lang.ManagedLifeCycle;
 import js.log.Log;
 import js.log.LogFactory;
-import js.tiny.container.core.AppContext;
 import js.util.Params;
 
 /**
@@ -19,7 +20,7 @@ import js.util.Params;
  * 
  * @author Iulian Rotaru
  */
-public final class DaoImpl implements Dao, ManagedLifeCycle
+public final class DaoImpl implements Dao
 {
   private static final Log log = LogFactory.getLog(DaoImpl.class);
 
@@ -35,17 +36,18 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
   private final Store<DeviceCategory> categoryStore;
   private final Store<DeviceDescriptor> deviceStore;
 
-  public DaoImpl(AppContext context)
+  @Inject
+  public DaoImpl(Application app)
   {
-    userStore = new Store<User>(context, STORE_USER, User.class);
-    hostStore = new Store<Host>(context, STORE_HOST, Host.class);
-    zoneStore = new Store<Zone>(context, STORE_ZONE, Zone.class);
-    categoryStore = new Store<DeviceCategory>(context, STORE_DEVICE_CATEGORY, DeviceCategory.class);
-    deviceStore = new Store<DeviceDescriptor>(context, STORE_DEVICE_DESCRIPTOR, DeviceDescriptor.class);
+    userStore = new Store<User>(app, this, STORE_USER, User.class);
+    hostStore = new Store<Host>(app, this, STORE_HOST, Host.class);
+    zoneStore = new Store<Zone>(app, this, STORE_ZONE, Zone.class);
+    categoryStore = new Store<DeviceCategory>(app, this, STORE_DEVICE_CATEGORY, DeviceCategory.class);
+    deviceStore = new Store<DeviceDescriptor>(app, this, STORE_DEVICE_DESCRIPTOR, DeviceDescriptor.class);
   }
 
-  @Override
-  public void postConstruct() throws Exception
+  @PostConstruct
+  public void postConstruct()
   {
     log.trace("postConstruct()");
     userStore.load();
@@ -55,8 +57,8 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
     deviceStore.load();
   }
 
-  @Override
-  public void preDestroy() throws Exception
+  @PreDestroy
+  public void preDestroy()
   {
     log.trace("preDestroy()");
     userStore.save();
@@ -93,14 +95,7 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
   @Override
   public List<DeviceDescriptor> getDevicesByZone(final int zoneId)
   {
-    return deviceStore.values(new Store.Predicate<DeviceDescriptor>()
-    {
-      @Override
-      public boolean test(DeviceDescriptor device)
-      {
-        return device.getZoneId() == zoneId;
-      }
-    });
+    return deviceStore.values(device -> device.getZoneId() == zoneId);
   }
 
   @Override
@@ -118,14 +113,7 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
   @Override
   public List<DeviceDescriptor> getDevicesByCategory(final int categoryId)
   {
-    return deviceStore.values(new Store.Predicate<DeviceDescriptor>()
-    {
-      @Override
-      public boolean test(DeviceDescriptor device)
-      {
-        return device.getCategoryId() == categoryId;
-      }
-    });
+    return deviceStore.values(device -> device.getCategoryId() == categoryId);
   }
 
   @Override
@@ -216,14 +204,7 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
   @Override
   public DeviceCategory getDeviceCategoryByName(final String categoryName)
   {
-    return categoryStore.value(new Predicate<DeviceCategory>()
-    {
-      @Override
-      public boolean test(DeviceCategory category)
-      {
-        return category.getName().equals(categoryName);
-      }
-    });
+    return categoryStore.value(category -> category.getName().equals(categoryName));
   }
 
   @Override
@@ -266,14 +247,7 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
   public Host getHostByName(final String name)
   {
     Params.notNull(name, "Host name");
-    return hostStore.value(new Predicate<Host>()
-    {
-      @Override
-      public boolean test(Host host)
-      {
-        return name.equals(host.getName());
-      }
-    });
+    return hostStore.value(host -> name.equals(host.getName()));
   }
 
   @Override
@@ -304,27 +278,13 @@ public final class DaoImpl implements Dao, ManagedLifeCycle
   public List<Zone> getZonesByIcon(final String iconName)
   {
     Params.notNull(iconName, "Icon name");
-    return zoneStore.values(new Predicate<Zone>()
-    {
-      @Override
-      public boolean test(Zone zone)
-      {
-        return iconName.equals(zone.getIcon());
-      }
-    });
+    return zoneStore.values(zone -> iconName.equals(zone.getIcon()));
   }
 
   @Override
   public List<DeviceCategory> getCategoriesByIcon(final String iconName)
   {
     Params.notNull(iconName, "Icon name");
-    return categoryStore.values(new Predicate<DeviceCategory>()
-    {
-      @Override
-      public boolean test(DeviceCategory category)
-      {
-        return iconName.equals(category.getIcon());
-      }
-    });
+    return categoryStore.values(category -> iconName.equals(category.getIcon()));
   }
 }

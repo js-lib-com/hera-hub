@@ -1,9 +1,9 @@
 package js.hera.hub.impl;
 
+import jakarta.inject.Inject;
 import js.hera.hub.MessageBroker;
 import js.log.Log;
 import js.log.LogFactory;
-import js.tiny.container.core.Factory;
 import js.tiny.container.net.EventStream;
 
 /**
@@ -13,25 +13,21 @@ import js.tiny.container.net.EventStream;
  */
 final class DeviceEventStream extends EventStream
 {
-  /** Class logger. */
   private static final Log log = LogFactory.getLog(DeviceEventStream.class);
 
-  /** Event broker service. */
-  private MessageBrokerImpl service;
+  private MessageBroker messageBroker;
 
-  /**
-   * Private constructor to avoid instantiation with <code>new</code> operator.
-   */
-  private DeviceEventStream()
+  @Inject
+  public DeviceEventStream(MessageBroker messageBroker)
   {
-    log.trace("DeviceEventStream()");
-    this.service = (MessageBrokerImpl)Factory.getInstance(MessageBroker.class);
+    log.trace("DeviceEventStream(MessageBroker)");
+    this.messageBroker = messageBroker;
   }
 
   @Override
   public void onOpen()
   {
-    service.bindStream(this);
+    messageBroker.bindStream(this);
     super.onOpen();
     log.debug("Open push notification stream with device |%s|.", "test");
   }
@@ -40,7 +36,7 @@ final class DeviceEventStream extends EventStream
   public void onClose()
   {
     log.debug("Close push notification stream with device |%s|.", "test");
-    service.unbindStream(this);
+    messageBroker.unbindStream(this);
     super.onClose();
   }
 }

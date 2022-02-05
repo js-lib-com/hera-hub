@@ -3,51 +3,77 @@ package js.hera.hub;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
+
 import com.jslib.automata.Automata;
 import com.jslib.automata.AutomataImpl;
 
-import js.tiny.container.core.App;
-import js.tiny.container.core.AppContext;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.annotation.Priority;
+import jakarta.ejb.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import js.tiny.container.contextparam.ContextParam;
 import js.util.Strings;
 
-public class Application extends App
+@ApplicationScoped
+@Startup
+@Priority(0)
+public class Application
 {
-  private static Application instance;
+  @ContextParam(name = "files.store", mandatory = true)
+  private static File FILES_STORE;
 
-  public static Application instance()
-  {
-    return instance;
-  }
-
-  private final AppContext context;
   private final Automata automata;
   private final File automataSourceDir;
 
+  private final String name;
   private double power;
 
-  public Application(AppContext context) throws IOException, ClassNotFoundException
+  @Inject
+  public Application(ServletContext servletContext) throws IOException, ClassNotFoundException
   {
-    super(context);
-    instance = this;
-    this.context = context;
-    this.automata = new AutomataImpl(context.getAppFile("auto"));
-    this.automataSourceDir = context.getAppFile("auto/src");
+    this.automata = new AutomataImpl(getAppFile("auto"));
+    this.automataSourceDir = getAppFile("auto/src");
+
+    // if present, context path always starts with path separator
+    final String contextPath = servletContext.getContextPath();
+    this.name = contextPath.isEmpty() ? null : contextPath.substring(1);
   }
 
-  @Override
-  public void postConstruct() throws Exception
+  @PostConstruct
+  public void postConstruct()
   {
-    super.postConstruct();
-    automata.postConstruct();
-    Service service = context.getInstance(Service.class);
-    this.automata.setDeviceActionHandler(service);
+    try {
+      automata.postConstruct();
+    }
+    catch(Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
-  @Override
-  public void preDestroy() throws Exception
+  @PreDestroy
+  public void preDestroy()
   {
-    automata.preDestroy();
-    super.preDestroy();
+    try {
+      automata.preDestroy();
+    }
+    catch(Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  public String getAppName()
+  {
+    return name;
+  }
+
+  public File getAppFile(String path)
+  {
+    return new File(FILES_STORE, path);
   }
 
   public Automata getAutomata()
@@ -62,7 +88,7 @@ public class Application extends App
 
   public void computePowerValue(double power)
   {
-    File energyIndex = context.getAppFile("energy-index");
+    File energyIndex = getAppFile("energy-index");
     try {
       double index = Double.parseDouble(Strings.load(energyIndex));
       index += 0.001;

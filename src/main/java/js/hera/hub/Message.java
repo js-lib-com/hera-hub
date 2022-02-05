@@ -1,7 +1,7 @@
 package js.hera.hub;
 
 import js.json.Json;
-import js.tiny.container.core.Factory;
+import js.util.Classes;
 
 public class Message
 {
@@ -15,7 +15,7 @@ public class Message
 
   public <T> T value()
   {
-    Json json = Factory.getInstance(Json.class);
+    Json json = Classes.loadService(Json.class);
     return json.parse(value, type.value());
   }
 

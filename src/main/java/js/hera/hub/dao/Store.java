@@ -11,20 +11,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 
+import js.hera.hub.Application;
 import js.json.Json;
 import js.json.JsonException;
 import js.lang.GType;
 import js.log.Log;
 import js.log.LogFactory;
-import js.tiny.container.core.AppContext;
 import js.util.Classes;
 
 public class Store<T>
 {
   private static final Log log = LogFactory.getLog(Store.class);
 
-  private final AppContext context;
+  private final Application app;
+  private final Dao dao;
   private final Json json;
   private final String name;
 
@@ -32,17 +34,18 @@ public class Store<T>
 
   private SortedMap<Integer, T> store;
 
-  public Store(AppContext context, String storeName, Class<T> type)
+  public Store(Application app, Dao dao, String storeName, Class<T> type)
   {
-    this.context = context;
-    this.json = context.getInstance(Json.class);
+    this.app = app;
+    this.dao = dao;
+    this.json = Classes.loadService(Json.class);
     this.name = storeName;
     this.type = type;
   }
 
-  public void load() throws JsonException, ClassCastException, IOException
+  public void load()
   {
-    File storeFile = context.getAppFile(name);
+    File storeFile = app.getAppFile(name);
     if(!storeFile.exists()) {
       store = new TreeMap<Integer, T>();
       return;
@@ -52,6 +55,10 @@ public class Store<T>
       store = json.parse(reader, new GType(SortedMap.class, Integer.class, type));
       log.debug("Store |%s| loaded.", name);
     }
+    catch(IllegalArgumentException | JsonException | ClassCastException | IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     if(store == null) {
       store = new TreeMap<Integer, T>();
@@ -60,7 +67,7 @@ public class Store<T>
 
   public void save()
   {
-    try (Writer writer = new FileWriter(context.getAppFile(name))) {
+    try (Writer writer = new FileWriter(app.getAppFile(name))) {
       json.stringify(writer, store);
       log.debug("Store |%s| saved.", name);
     }
@@ -73,7 +80,7 @@ public class Store<T>
   {
     T t = store.get(id);
     if(t instanceof PostLoad) {
-      ((PostLoad)t).postLoad(context);
+      ((PostLoad)t).postLoad(dao);
     }
     return t;
   }
@@ -110,7 +117,7 @@ public class Store<T>
     List<T> values = new ArrayList<T>(store.values());
     for(T value : values) {
       if(value instanceof PostLoad) {
-        ((PostLoad)value).postLoad(context);
+        ((PostLoad)value).postLoad(dao);
       }
     }
     return Collections.unmodifiableList(values);
@@ -135,10 +142,5 @@ public class Store<T>
       }
     }
     return null;
-  }
-
-  public static interface Predicate<T>
-  {
-    boolean test(T t);
   }
 }

@@ -10,8 +10,6 @@ import org.junit.Test;
 
 import js.hera.hub.Service;
 import js.hera.hub.model.SystemDescriptor;
-import js.tiny.container.core.AppContext;
-import js.tiny.container.unit.TestContext;
 
 /**
  * Unit tests for application controller.
@@ -21,7 +19,7 @@ import js.tiny.container.unit.TestContext;
 @Ignore
 public class ServiceUnitTest
 {
-  private static AppContext context;
+  //private static Application context;
 
   /** Service instance under test. */
   private Service service;
@@ -29,13 +27,13 @@ public class ServiceUnitTest
   @BeforeClass
   public static void beforeClass() throws Exception
   {
-    context = TestContext.start(ServiceUnitTest.class.getResourceAsStream("/test-config.xml"));
+    //context = TestContext.start(ServiceUnitTest.class.getResourceAsStream("/test-config.xml"));
   }
 
   @Before
   public void beforeTest()
   {
-    service = context.getInstance(Service.class);
+    //service = context.getInstance(Service.class);
   }
 
   @Test

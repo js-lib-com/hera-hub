@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<app>
-	<managed-classes>
-		<app interface="js.tiny.container.core.App" class="js.hera.hub.Application" />
+<app package="js.hera.hub">
+	<binding bind="Application" />
+	<binding bind="dao.Dao" to="dao.DaoImpl" />
+	<binding bind="Service" to="impl.ServiceImpl" />
+	<binding bind="MessageBroker" to="impl.MessageBrokerImpl" />
 
-		<dao interface="js.hera.hub.dao.Dao" class="js.hera.hub.dao.DaoImpl" type="PROXY" scope="APPLICATION" />
+	<binding bind="impl.HostManager" />
+	<binding bind="util.JmxServer" />
+	<binding bind="util.NetInterfaces" />
 
-		<service interface="js.hera.hub.Service" class="js.hera.hub.impl.ServiceImpl" />
-		<message-broker interface="js.hera.hub.MessageBroker" class="js.hera.hub.impl.MessageBrokerImpl" />
-
-		<host-manager class="js.hera.hub.impl.HostManager" />
-		<jmx-server class="js.hera.hub.util.JmxServer" />
-		<net-interfaces class="js.hera.hub.util.NetInterfaces" />
-		
-		<push-stream class="js.hera.hub.impl.DeviceEventStream" interface="js.tiny.container.net.EventStream" scope="LOCAL" />
-	</managed-classes>
-	<observer period="60000" />
+	<binding bind="js.tiny.container.net.EventStream" to="impl.DeviceEventStream" />
 </app>

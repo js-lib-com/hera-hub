@@ -2,7 +2,6 @@ package js.hera.hub.model;
 
 import js.hera.dev.Device;
 import js.hera.hub.dao.Dao;
-import js.tiny.container.core.Factory;
 
 @SuppressWarnings("unused")
 public class DeviceDTO
@@ -19,7 +18,7 @@ public class DeviceDTO
   private String categoryDisplay;
   private String hostDisplay;
 
-  public DeviceDTO(DeviceDescriptor descriptor)
+  public DeviceDTO(Dao dao, DeviceDescriptor descriptor)
   {
     this.id = descriptor.getId();
     this.zoneId = descriptor.getZoneId();
@@ -29,7 +28,6 @@ public class DeviceDTO
     this.display = descriptor.getDisplay();
     this.deviceClass = descriptor.getDeviceClass();
 
-    Dao dao = Factory.getInstance(Dao.class);
     Zone zone = dao.getZone(descriptor.getZoneId());
     if(zone != null) {
       zoneDisplay = zone.getDisplay();

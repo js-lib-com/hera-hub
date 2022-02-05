@@ -1,15 +1,12 @@
 package js.hera.hub.unit.it;
 
-import java.io.File;
-
 import org.junit.Ignore;
 
 import js.hera.hub.client.DeviceFactory;
 import js.hera.hub.client.Service;
 import js.hera.hub.client.SetpointThermostat;
 import js.lang.Callback;
-import js.tiny.container.core.Factory;
-import js.tiny.container.unit.TestContext;
+import js.tiny.container.spi.Factory;
 import junit.framework.TestCase;
 
 @Ignore
@@ -18,7 +15,7 @@ public class WebServiceUnitTest extends TestCase
   @Override
   protected void setUp() throws Exception
   {
-    TestContext.start(new File("test/js/hera/hub/test-config.xml"));
+    //TestContext.start(new File("test/js/hera/hub/test-config.xml"));
   }
 
   public void testMultipleSetters() throws InterruptedException

@@ -11,6 +11,8 @@ import com.jslib.automata.ActionDescriptor;
 import com.jslib.automata.Automata;
 import com.jslib.automata.Rule;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 import js.hera.dev.Actuator;
 import js.hera.dev.BinaryLight;
 import js.hera.dev.ColorLED;
@@ -42,8 +44,6 @@ import js.hera.hub.model.Zone;
 import js.io.FilesIterator;
 import js.log.Log;
 import js.log.LogFactory;
-import js.tiny.container.core.App;
-import js.tiny.container.core.AppContext;
 import js.tiny.container.http.form.UploadedFile;
 import js.util.Files;
 import js.util.Params;
@@ -58,20 +58,25 @@ final class ServiceImpl implements Service
 {
   private static final Log log = LogFactory.getLog(ServiceImpl.class);
 
-  private final AppContext context;
-  private final Application application;
+  private final Application app;
   private final Dao dao;
   private final HostManager hostManager;
   private final Automata automata;
 
-  public ServiceImpl(AppContext context) throws IOException
+  @Inject
+  public ServiceImpl(Application app, Dao dao, HostManager hostManager) throws IOException
   {
-    log.trace("ServiceImpl(AppContext)");
-    this.context = context;
-    this.application = context.getInstance(App.class);
-    this.dao = context.getInstance(Dao.class);
-    this.hostManager = context.getInstance(HostManager.class);
-    this.automata = application.getAutomata();
+    log.trace("ServiceImpl(Application, Dao, HostManager)");
+    this.app = app;
+    this.dao = dao;
+    this.hostManager = hostManager;
+    this.automata = app.getAutomata();
+  }
+
+  @PostConstruct
+  private void postConstruct()
+  {
+    this.automata.setDeviceActionHandler(this);
   }
 
   // ------------------------------------------------------
@@ -89,7 +94,7 @@ final class ServiceImpl implements Service
   }
 
   @Override
-  public Object invokeDeviceAction(String deviceName, String actionName, Object... arguments) throws Exception
+  public Object invokeDeviceAction(String deviceName, String actionName, Object[] arguments) throws Exception
   {
     Params.notEmpty(deviceName, "Device name");
     Params.notEmpty(actionName, "Action name");
@@ -209,7 +214,7 @@ final class ServiceImpl implements Service
     Params.EQ(device.getId(), 0, "Device ID");
     dao.createDevice(device);
     // after dao create, device id is updated
-    return new DeviceDTO(device);
+    return new DeviceDTO(dao, device);
   }
 
   @Override
@@ -224,7 +229,7 @@ final class ServiceImpl implements Service
     DeviceDescriptor persistedInstance = dao.getDevice(device.getId());
     persistedInstance.update(device);
     dao.updateDevice(persistedInstance);
-    return new DeviceDTO(device);
+    return new DeviceDTO(dao, device);
   }
 
   @Override
@@ -274,7 +279,7 @@ final class ServiceImpl implements Service
   {
     List<DeviceDTO> devices = new ArrayList<DeviceDTO>();
     for(DeviceDescriptor descriptor : dao.getDeviceDescriptors()) {
-      devices.add(new DeviceDTO(descriptor));
+      devices.add(new DeviceDTO(dao, descriptor));
     }
     return devices;
   }
@@ -439,8 +444,8 @@ final class ServiceImpl implements Service
   @Override
   public PowerMeterValue getPowerMeterValue() throws NumberFormatException, IOException
   {
-    File energyIndex = context.getAppFile("energy-index");
-    return new PowerMeterValue(Double.parseDouble(Strings.load(energyIndex)), Application.instance().getPowerValue());
+    File energyIndex = app.getAppFile("energy-index");
+    return new PowerMeterValue(Double.parseDouble(Strings.load(energyIndex)), app.getPowerValue());
   }
 
   // ------------------------------------------------------

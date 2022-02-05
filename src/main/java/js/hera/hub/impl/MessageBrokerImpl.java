@@ -12,32 +12,34 @@ import org.influxdb.dto.Point;
 
 import com.jslib.automata.Automata;
 
-import js.annotation.ContextParam;
+import jakarta.inject.Inject;
 import js.hera.hub.Application;
 import js.hera.hub.DeviceState;
 import js.hera.hub.Message;
 import js.hera.hub.MessageBroker;
 import js.log.Log;
 import js.log.LogFactory;
-import js.tiny.container.core.App;
-import js.tiny.container.core.AppContext;
+import js.tiny.container.contextparam.ContextParam;
 import js.tiny.container.net.EventStream;
 
 class MessageBrokerImpl implements MessageBroker
 {
   private static final Log log = LogFactory.getLog(MessageBrokerImpl.class);
 
-  @ContextParam(value = "influx.url", mandatory = false)
+  @ContextParam(name = "influx.url", mandatory = false)
   private static String INFLUX_URL;
 
+  private final Application application;
   private final Automata automata;
-  private final List<EventStream> streams = Collections.synchronizedList(new ArrayList<EventStream>());
   private final InfluxDB influx;
+  private final List<EventStream> streams = Collections.synchronizedList(new ArrayList<EventStream>());
 
-  public MessageBrokerImpl(AppContext context)
+  @Inject
+  public MessageBrokerImpl(Application application)
   {
-    log.trace("EventBrokerImpl(AppContext)");
-    this.automata = ((Application)context.getInstance(App.class)).getAutomata();
+    log.trace("MessageBrokerImpl(Application)");
+    this.application = application;
+    this.automata = application.getAutomata();
 
     if(INFLUX_URL != null) {
       this.influx = InfluxDBFactory.connect(INFLUX_URL);
@@ -48,13 +50,15 @@ class MessageBrokerImpl implements MessageBroker
     }
   }
 
-  void bindStream(EventStream stream)
+  @Override
+  public void bindStream(EventStream stream)
   {
     log.trace("bindStream(EventStream)");
     streams.add(stream);
   }
 
-  void unbindStream(EventStream stream)
+  @Override
+  public void unbindStream(EventStream stream)
   {
     log.trace("unbindStream(EventStream)");
     streams.remove(stream);
@@ -86,7 +90,7 @@ class MessageBrokerImpl implements MessageBroker
 
       // special treatment, aka hack, for power meter
       if(deviceState.getDeviceName().equals("power-meter")) {
-        Application.instance().computePowerValue(deviceState.getValue());
+        application.computePowerValue(deviceState.getValue());
       }
 
       // push device state to UI via server sent event stream
