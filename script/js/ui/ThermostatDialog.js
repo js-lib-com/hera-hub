@@ -24,12 +24,12 @@ js.ui.ThermostatDialog.prototype = {
 		this._callback = callback;
 		this._panorama.lock();
 
-		Service.invokeDeviceAction(this._deviceName, "getState", [], state => {
+		Service.invokeDeviceAction(this._deviceName, "getState", [], function(state) {
 			this._temperatureView.setValue(state.temperature);
 			this._setpoint = state.setpoint;
 			this._setpointView.setValue(state.setpoint);
 			this._stateView.addCssClass("running", state.running);
-		});
+		}, this);
 
 		this.show();
 	},
@@ -51,10 +51,10 @@ js.ui.ThermostatDialog.prototype = {
 	},
 
 	_setSetpoint: function() {
-		Service.invokeDeviceAction(this._deviceName, "setSetpoint", [this._setpoint], setpoint => {
+		Service.invokeDeviceAction(this._deviceName, "setSetpoint", [this._setpoint], function(setpoint) {
 			this._setpoint = setpoint;
 			this._setpointView.setValue(setpoint);
-		});
+		}, this);
 	},
 
 	toString: function() {
