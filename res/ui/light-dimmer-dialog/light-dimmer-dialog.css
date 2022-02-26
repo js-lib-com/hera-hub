@@ -29,6 +29,20 @@
 	font-size: 5vh;
 }
 
+.light-dimmer.dialog .caption .switch {
+	position: absolute;
+	top: 2vh;
+	right: 2vh;
+	width: 6vh;
+	height: 6vh;
+	border-radius: 3vh;
+	background-color: lightgray;
+}
+
+.light-dimmer.dialog .caption .switch.active {
+	background-color: orange;
+}
+
 .light-dimmer .arrow {
 	xheight: 11vh;
 }

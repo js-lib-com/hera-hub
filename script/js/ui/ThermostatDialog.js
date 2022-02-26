@@ -6,8 +6,6 @@ js.ui.ThermostatDialog = function(ownerDoc, node) {
 	this.$super(ownerDoc, node);
 
 	this._panorama = ownerDoc.getByClass(js.ui.DevicesLayout);
-
-	this._stateView = this.getByCss(".state");
 	this._temperatureView = this.getByCss(".value .temperature");
 	this._setpointView = this.getByCss(".value .setpoint");
 
@@ -28,7 +26,6 @@ js.ui.ThermostatDialog.prototype = {
 			this._temperatureView.setValue(state.temperature);
 			this._setpoint = state.setpoint;
 			this._setpointView.setValue(state.setpoint);
-			this._stateView.addCssClass("running", state.running);
 		}, this);
 
 		this.show();

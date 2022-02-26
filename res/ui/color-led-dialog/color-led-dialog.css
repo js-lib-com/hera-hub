@@ -29,6 +29,20 @@
 	font-size: 5vh;
 }
 
+.color-led.dialog .caption .switch {
+	position: absolute;
+	top: 2vh;
+	right: 2vh;
+	width: 6vh;
+	height: 6vh;
+	border-radius: 3vh;
+	background-color: lightgray;
+}
+
+.color-led.dialog .caption .switch.active {
+	background-color: orange;
+}
+
 .color-led .arrow {
 	xheight: 11vh;
 }

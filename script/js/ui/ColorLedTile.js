@@ -41,7 +41,7 @@ js.ui.ColorLedTile.prototype = {
 	},
 
 	_onClick : function(ev) {
-		this._dialog.open(this._device, this._color, function(value) {
+		this._dialog.open(this._device, function(value) {
 			this._setColorPreview(value);
 		}, this);
 	},

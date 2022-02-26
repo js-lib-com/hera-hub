@@ -29,20 +29,6 @@
 	font-size: 5vh;
 }
 
-.thermostat.dialog .caption .state {
-	position: absolute;
-	top: 2vh;
-	right: 2vh;
-	width: 6vh;
-	height: 6vh;
-	border-radius: 3vh;
-	background-color: lightgray;
-}
-
-.thermostat.dialog .caption .state.running {
-	background-color: orange;
-}
-
 .thermostat.dialog .arrow {
 	xheight: 11vh;
 }

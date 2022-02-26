@@ -38,7 +38,7 @@ js.ui.LightDimmerTile.prototype = {
 	},
 
 	_onClick : function(ev) {
-		this._dialog.open(this._device, this._valueView.getValue(), function(value) {
+		this._dialog.open(this._device, function(value) {
 			this._valueView.setValue(value);
 		}, this);
 	},
