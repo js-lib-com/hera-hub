@@ -5,15 +5,12 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import com.jslib.automata.Automata;
-import com.jslib.automata.AutomataImpl;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Priority;
 import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import js.log.Log;
+import js.log.LogFactory;
 import js.tiny.container.contextparam.ContextParam;
 import js.util.Strings;
 
@@ -22,11 +19,10 @@ import js.util.Strings;
 @Priority(0)
 public class Application
 {
+  private static final Log log = LogFactory.getLog(Application.class);
+
   @ContextParam(name = "files.store", mandatory = true)
   private static File FILES_STORE;
-
-  private final Automata automata;
-  private final File automataSourceDir;
 
   private final String name;
   private double power;
@@ -34,36 +30,11 @@ public class Application
   @Inject
   public Application(ServletContext servletContext) throws IOException, ClassNotFoundException
   {
-    this.automata = new AutomataImpl(getAppFile("auto"));
-    this.automataSourceDir = getAppFile("auto/src");
+    log.trace("Application(ServletContext)");
 
     // if present, context path always starts with path separator
     final String contextPath = servletContext.getContextPath();
     this.name = contextPath.isEmpty() ? null : contextPath.substring(1);
-  }
-
-  @PostConstruct
-  public void postConstruct()
-  {
-    try {
-      automata.postConstruct();
-    }
-    catch(Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
-
-  @PreDestroy
-  public void preDestroy()
-  {
-    try {
-      automata.preDestroy();
-    }
-    catch(Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
   }
 
   public String getAppName()
@@ -76,16 +47,6 @@ public class Application
     return new File(FILES_STORE, path);
   }
 
-  public Automata getAutomata()
-  {
-    return automata;
-  }
-
-  public File getAutomataSourceDir()
-  {
-    return automataSourceDir;
-  }
-
   public void computePowerValue(double power)
   {
     File energyIndex = getAppFile("energy-index");
@@ -94,13 +55,8 @@ public class Application
       index += 0.001;
       Strings.save(Double.toString(index), energyIndex);
     }
-    catch(NumberFormatException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    catch(IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    catch(Exception e) {
+      log.error(e);
     }
 
     this.power = power;

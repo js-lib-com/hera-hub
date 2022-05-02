@@ -61,6 +61,34 @@ js.hera.hub.Service = {
 	},
 
 	/**
+	 * Invoke.
+	 *
+	 * @param java.lang.String[] args,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return java.lang.Object
+	 * @throws java.lang.Exception
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 invoke: function(args) {
+		$assert(typeof args !== "undefined", "js.hera.hub.Service#invoke", "Args argument is undefined.");
+		$assert(args === null || js.lang.Types.isArray(args), "js.hera.hub.Service#invoke", "Args argument is not an array.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#invoke", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#invoke", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.hera.hub.Service", "invoke");
+		rmi.setParameters(args);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
 	 * Get devices by zone.
 	 *
 	 * @param int zoneId,
@@ -637,28 +665,6 @@ js.hera.hub.Service = {
 	},
 
 	/**
-	 * Get binary lights.
-	 *
-	 * @param Function callback function to invoke on RMI completion,
-	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return java.util.List<java.lang.String>
-	 * @assert callback is a {@link Function} and scope is an {@link Object}.
-	 */
-	 getBinaryLights: function() {
-		var __callback__ = arguments[0];
-		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#getBinaryLights", "Callback is not a function.");
-		var __scope__ = arguments[1];
-		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#getBinaryLights", "Scope is not an object.");
-		if(!js.lang.Types.isObject(__scope__)) {
-			__scope__ = window;
-		}
-
-		var rmi = new js.net.RMI();
-		rmi.setMethod("js.hera.hub.Service", "getBinaryLights");
-		rmi.exec(__callback__, __scope__);
-	},
-
-	/**
 	 * Get devices by category name.
 	 *
 	 * @param java.lang.String categoryName,
@@ -914,193 +920,6 @@ js.hera.hub.Service = {
 
 		var rmi = new js.net.RMI();
 		rmi.setMethod("js.hera.hub.Service", "getPowerMeterValue");
-		rmi.exec(__callback__, __scope__);
-	},
-
-	/**
-	 * Create action code.
-	 *
-	 * @param java.lang.String actionDisplay,
-	 * @param Function callback function to invoke on RMI completion,
-	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return com.jslib.automata.ActionDescriptor
-	 * @throws java.io.IOException
-	 * @assert callback is a {@link Function} and scope is an {@link Object}.
-	 */
-	 createActionCode: function(actionDisplay) {
-		$assert(typeof actionDisplay !== "undefined", "js.hera.hub.Service#createActionCode", "Action display argument is undefined.");
-		$assert(actionDisplay === null || js.lang.Types.isString(actionDisplay), "js.hera.hub.Service#createActionCode", "Action display argument is not a string.");
-
-		var __callback__ = arguments[1];
-		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#createActionCode", "Callback is not a function.");
-		var __scope__ = arguments[2];
-		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#createActionCode", "Scope is not an object.");
-		if(!js.lang.Types.isObject(__scope__)) {
-			__scope__ = window;
-		}
-
-		var rmi = new js.net.RMI();
-		rmi.setMethod("js.hera.hub.Service", "createActionCode");
-		rmi.setParameters(actionDisplay);
-		rmi.exec(__callback__, __scope__);
-	},
-
-	/**
-	 * Save action.
-	 *
-	 * @param com.jslib.automata.ActionDescriptor action,
-	 * @param Function callback function to invoke on RMI completion,
-	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return void
-	 * @throws java.io.IOException
-	 * @throws java.lang.ClassNotFoundException
-	 * @assert callback is a {@link Function} and scope is an {@link Object}, if they are defined.
-	 * @note since method return type is void, callback, and hence scope too, is optional.
-	 */
-	 saveAction: function(action) {
-		$assert(typeof action !== "undefined", "js.hera.hub.Service#saveAction", "Action argument is undefined.");
-
-		var __callback__ = arguments[1];
-		$assert(typeof __callback__ === "undefined" || js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#saveAction", "Callback is not a function.");
-		var __scope__ = arguments[2];
-		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#saveAction", "Scope is not an object.");
-		if(!js.lang.Types.isObject(__scope__)) {
-			__scope__ = window;
-		}
-
-		var rmi = new js.net.RMI();
-		rmi.setMethod("js.hera.hub.Service", "saveAction");
-		rmi.setParameters(action);
-		rmi.exec(__callback__, __scope__);
-	},
-
-	/**
-	 * Remove action.
-	 *
-	 * @param java.lang.String actionClassName,
-	 * @param Function callback function to invoke on RMI completion,
-	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return void
-	 * @assert callback is a {@link Function} and scope is an {@link Object}, if they are defined.
-	 * @note since method return type is void, callback, and hence scope too, is optional.
-	 */
-	 removeAction: function(actionClassName) {
-		$assert(typeof actionClassName !== "undefined", "js.hera.hub.Service#removeAction", "Action class name argument is undefined.");
-		$assert(actionClassName === null || js.lang.Types.isString(actionClassName), "js.hera.hub.Service#removeAction", "Action class name argument is not a string.");
-
-		var __callback__ = arguments[1];
-		$assert(typeof __callback__ === "undefined" || js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#removeAction", "Callback is not a function.");
-		var __scope__ = arguments[2];
-		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#removeAction", "Scope is not an object.");
-		if(!js.lang.Types.isObject(__scope__)) {
-			__scope__ = window;
-		}
-
-		var rmi = new js.net.RMI();
-		rmi.setMethod("js.hera.hub.Service", "removeAction");
-		rmi.setParameters(actionClassName);
-		rmi.exec(__callback__, __scope__);
-	},
-
-	/**
-	 * Save rule.
-	 *
-	 * @param com.jslib.automata.Rule rule,
-	 * @param Function callback function to invoke on RMI completion,
-	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return void
-	 * @throws java.lang.ClassNotFoundException
-	 * @throws java.io.IOException
-	 * @assert callback is a {@link Function} and scope is an {@link Object}, if they are defined.
-	 * @note since method return type is void, callback, and hence scope too, is optional.
-	 */
-	 saveRule: function(rule) {
-		$assert(typeof rule !== "undefined", "js.hera.hub.Service#saveRule", "Rule argument is undefined.");
-
-		var __callback__ = arguments[1];
-		$assert(typeof __callback__ === "undefined" || js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#saveRule", "Callback is not a function.");
-		var __scope__ = arguments[2];
-		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#saveRule", "Scope is not an object.");
-		if(!js.lang.Types.isObject(__scope__)) {
-			__scope__ = window;
-		}
-
-		var rmi = new js.net.RMI();
-		rmi.setMethod("js.hera.hub.Service", "saveRule");
-		rmi.setParameters(rule);
-		rmi.exec(__callback__, __scope__);
-	},
-
-	/**
-	 * Remove rule.
-	 *
-	 * @param java.lang.String ruleName,
-	 * @param Function callback function to invoke on RMI completion,
-	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return void
-	 * @throws java.io.IOException
-	 * @assert callback is a {@link Function} and scope is an {@link Object}, if they are defined.
-	 * @note since method return type is void, callback, and hence scope too, is optional.
-	 */
-	 removeRule: function(ruleName) {
-		$assert(typeof ruleName !== "undefined", "js.hera.hub.Service#removeRule", "Rule name argument is undefined.");
-		$assert(ruleName === null || js.lang.Types.isString(ruleName), "js.hera.hub.Service#removeRule", "Rule name argument is not a string.");
-
-		var __callback__ = arguments[1];
-		$assert(typeof __callback__ === "undefined" || js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#removeRule", "Callback is not a function.");
-		var __scope__ = arguments[2];
-		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#removeRule", "Scope is not an object.");
-		if(!js.lang.Types.isObject(__scope__)) {
-			__scope__ = window;
-		}
-
-		var rmi = new js.net.RMI();
-		rmi.setMethod("js.hera.hub.Service", "removeRule");
-		rmi.setParameters(ruleName);
-		rmi.exec(__callback__, __scope__);
-	},
-
-	/**
-	 * Get actions.
-	 *
-	 * @param Function callback function to invoke on RMI completion,
-	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return java.util.Set<com.jslib.automata.ActionDescriptor>
-	 * @assert callback is a {@link Function} and scope is an {@link Object}.
-	 */
-	 getActions: function() {
-		var __callback__ = arguments[0];
-		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#getActions", "Callback is not a function.");
-		var __scope__ = arguments[1];
-		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#getActions", "Scope is not an object.");
-		if(!js.lang.Types.isObject(__scope__)) {
-			__scope__ = window;
-		}
-
-		var rmi = new js.net.RMI();
-		rmi.setMethod("js.hera.hub.Service", "getActions");
-		rmi.exec(__callback__, __scope__);
-	},
-
-	/**
-	 * Get rules.
-	 *
-	 * @param Function callback function to invoke on RMI completion,
-	 * @param Object scope optional callback run-time scope, default to global scope.
-	 * @return java.util.Set<com.jslib.automata.Rule>
-	 * @assert callback is a {@link Function} and scope is an {@link Object}.
-	 */
-	 getRules: function() {
-		var __callback__ = arguments[0];
-		$assert(js.lang.Types.isFunction(__callback__), "js.hera.hub.Service#getRules", "Callback is not a function.");
-		var __scope__ = arguments[1];
-		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.hera.hub.Service#getRules", "Scope is not an object.");
-		if(!js.lang.Types.isObject(__scope__)) {
-			__scope__ = window;
-		}
-
-		var rmi = new js.net.RMI();
-		rmi.setMethod("js.hera.hub.Service", "getRules");
 		rmi.exec(__callback__, __scope__);
 	}
 };
