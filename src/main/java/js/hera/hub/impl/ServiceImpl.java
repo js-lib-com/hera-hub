@@ -5,13 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import com.jslib.automata.ActionDescriptor;
-import com.jslib.automata.Automata;
-import com.jslib.automata.Rule;
-
-import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import js.hera.dev.Actuator;
 import js.hera.dev.BinaryLight;
@@ -61,7 +55,6 @@ final class ServiceImpl implements Service
   private final Application app;
   private final Dao dao;
   private final HostManager hostManager;
-  private final Automata automata;
 
   @Inject
   public ServiceImpl(Application app, Dao dao, HostManager hostManager) throws IOException
@@ -70,13 +63,6 @@ final class ServiceImpl implements Service
     this.app = app;
     this.dao = dao;
     this.hostManager = hostManager;
-    this.automata = app.getAutomata();
-  }
-
-  @PostConstruct
-  private void postConstruct()
-  {
-    this.automata.setDeviceActionHandler(this);
   }
 
   // ------------------------------------------------------
@@ -93,6 +79,19 @@ final class ServiceImpl implements Service
     return systemDescriptor;
   }
 
+  @Override
+  public Object invoke(String[] parameters) throws Exception
+  {
+    String deviceName = parameters[0];
+    String actionName = parameters[1];
+    Object[] arguments = parameters.length == 3 ? new Object[]
+    {
+        parameters[2]
+    } : new Object[0];
+    
+    return invokeDeviceAction(deviceName, actionName, arguments);
+  }
+  
   @Override
   public Object invokeDeviceAction(String deviceName, String actionName, Object[] arguments) throws Exception
   {
@@ -246,22 +245,6 @@ final class ServiceImpl implements Service
       zone.setDevicesCount(dao.getDevicesCountByZone(zone.getId()));
     }
     return zones;
-  }
-
-  @Override
-  public List<String> getBinaryLights()
-  {
-    DeviceCategory category = dao.getDeviceCategoryByName("lights");
-    if(category == null) {
-      return Collections.emptyList();
-    }
-
-    List<String> binaryLights = new ArrayList<String>();
-    for(DeviceDescriptor device : dao.getDevicesByCategory(category.getId())) {
-      binaryLights.add(device.getName());
-    }
-
-    return binaryLights;
   }
 
   @Override
@@ -446,50 +429,5 @@ final class ServiceImpl implements Service
   {
     File energyIndex = app.getAppFile("energy-index");
     return new PowerMeterValue(Double.parseDouble(Strings.load(energyIndex)), app.getPowerValue());
-  }
-
-  // ------------------------------------------------------
-  // auto
-
-  @Override
-  public ActionDescriptor createActionCode(String actionDisplay) throws IOException
-  {
-    return automata.createActionClass(actionDisplay);
-  }
-
-  @Override
-  public void saveAction(ActionDescriptor action) throws IOException, ClassNotFoundException
-  {
-    automata.saveAction(action);
-  }
-
-  @Override
-  public void removeAction(String actionClassName)
-  {
-    automata.removeAction(actionClassName);
-  }
-
-  @Override
-  public void saveRule(Rule rule) throws ClassNotFoundException, IOException
-  {
-    automata.saveRule(rule);
-  }
-
-  @Override
-  public void removeRule(String ruleName) throws IOException
-  {
-    automata.removeRule(ruleName);
-  }
-
-  @Override
-  public Set<ActionDescriptor> getActions()
-  {
-    return automata.getActions();
-  }
-
-  @Override
-  public Set<Rule> getRules()
-  {
-    return automata.getRules();
   }
 }

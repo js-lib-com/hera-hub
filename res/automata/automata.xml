@@ -1,6 +1,0 @@
-<page>
-	<title>automata</title>
-	<script src="gen/js/hera/hub/Service.js"></script>
-	<script src="lib/list-control/list-control.js"></script>
-	<script src="script/js/hera/AutomataPage.js"></script>
-</page>

@@ -20,11 +20,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.js-lib</groupId>
-			<artifactId>automata</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.js-lib</groupId>
 			<artifactId>tiny-event-stream</artifactId>
 			<version>1.3.2</version>
 			<scope>provided</scope>

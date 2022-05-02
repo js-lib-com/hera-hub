@@ -2,22 +2,20 @@ package js.hera.hub;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Remote;
 import javax.ws.rs.Path;
 
-import com.jslib.automata.ActionDescriptor;
-import com.jslib.automata.DeviceActionHandler;
-import com.jslib.automata.Rule;
-
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 import js.hera.dev.Device;
 import js.hera.hub.model.DeviceCategory;
 import js.hera.hub.model.DeviceDTO;
@@ -33,7 +31,7 @@ import js.tiny.container.http.form.UploadedFile;
 @ApplicationScoped
 @Remote
 @PermitAll
-public interface Service extends DeviceActionHandler
+public interface Service
 {
   // ------------------------------------------------------
   // HERA Smart Hub services
@@ -49,10 +47,13 @@ public interface Service extends DeviceActionHandler
    * @return action return value.
    * @throws Exception
    */
+  Object invokeDeviceAction(String deviceName, String actionName, Object[] args) throws Exception;
+
   @POST
-  @Path("invoke/{deviceName}/{actionName}/{args}")
-  Object invokeDeviceAction(@PathParam("deviceName") String deviceName, @PathParam("actionName") String actionName, @PathParam("args") Object[] args)
-      throws Exception;
+  @Path("invoke")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  Object invoke(String[] args) throws Exception;
 
   // ------------------------------------------------------
   // HERA Admin Console services
@@ -123,10 +124,6 @@ public interface Service extends DeviceActionHandler
   List<Class<? extends Device>> getDeviceClasses();
 
   @GET
-  @Path("binary-lights")
-  List<String> getBinaryLights();
-
-  @GET
   @Path("devices/{category}")
   List<DeviceDescriptor> getDevicesByCategoryName(@PathParam("category") String categoryName);
 
@@ -153,21 +150,4 @@ public interface Service extends DeviceActionHandler
   void removeIcon(@PathParam("iconName") String iconName);
 
   PowerMeterValue getPowerMeterValue() throws NumberFormatException, IOException;
-
-  // ------------------------------------------------------
-  // automata
-
-  ActionDescriptor createActionCode(String actionDisplay) throws IOException;
-
-  void saveAction(ActionDescriptor action) throws IOException, ClassNotFoundException;
-
-  void removeAction(String actionClassName);
-
-  void saveRule(Rule rule) throws ClassNotFoundException, IOException;
-
-  void removeRule(String ruleName) throws IOException;
-
-  Set<ActionDescriptor> getActions();
-
-  Set<Rule> getRules();
 }

@@ -2,15 +2,11 @@ package js.hera.hub.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
-
-import com.jslib.automata.Automata;
 
 import jakarta.inject.Inject;
 import js.hera.hub.Application;
@@ -30,7 +26,6 @@ class MessageBrokerImpl implements MessageBroker
   private static String INFLUX_URL;
 
   private final Application application;
-  private final Automata automata;
   private final InfluxDB influx;
   private final List<EventStream> streams = Collections.synchronizedList(new ArrayList<EventStream>());
 
@@ -39,7 +34,6 @@ class MessageBrokerImpl implements MessageBroker
   {
     log.trace("MessageBrokerImpl(Application)");
     this.application = application;
-    this.automata = application.getAutomata();
 
     if(INFLUX_URL != null) {
       this.influx = InfluxDBFactory.connect(INFLUX_URL);
@@ -81,12 +75,6 @@ class MessageBrokerImpl implements MessageBroker
         Point point = Point.measurement(deviceState.getDeviceName()).addField("value", deviceState.getValue()).build();
         influx.write(point);
       }
-
-      // handle automata event
-      Map<String, String> event = new HashMap<>();
-      event.put("deviceName", deviceState.getDeviceName());
-      event.put("value", Double.toString(deviceState.getValue()));
-      automata.handleEvent(event);
 
       // special treatment, aka hack, for power meter
       if(deviceState.getDeviceName().equals("power-meter")) {
