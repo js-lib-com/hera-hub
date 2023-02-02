@@ -5,8 +5,9 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jslib.util.Classes;
+
 import js.hera.dev.Device;
-import js.util.Classes;
 
 public final class DeviceMethods
 {

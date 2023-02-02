@@ -1,7 +1,8 @@
 package js.hera.hub.client;
 
+import java.util.function.Consumer;
+
 import js.hera.dev.Device;
-import js.lang.Callback;
 
 /**
  * Switch power on a not specified consumer.
@@ -19,5 +20,5 @@ public interface PowerSwitch extends Device
    * 
    * @return
    */
-  void getState(Callback<Boolean> callback);
+  void getState(Consumer<Boolean> callback);
 }

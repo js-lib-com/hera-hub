@@ -1,7 +1,8 @@
 package js.hera.hub.client;
 
+import java.util.function.Consumer;
+
 import js.hera.dev.Device;
-import js.lang.Callback;
 
 public interface MotionLight extends Device
 {
@@ -9,5 +10,5 @@ public interface MotionLight extends Device
 
   void turnOFF();
 
-  void getState(Callback<Boolean> callback);
+  void getState(Consumer<Boolean> callback);
 }

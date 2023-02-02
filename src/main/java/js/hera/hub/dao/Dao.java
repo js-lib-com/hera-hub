@@ -2,6 +2,8 @@ package js.hera.hub.dao;
 
 import java.util.List;
 
+import jakarta.annotation.ManagedBean;
+import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import js.hera.hub.model.DeviceCategory;
 import js.hera.hub.model.DeviceDescriptor;
@@ -15,8 +17,14 @@ import js.hera.hub.model.Zone;
  * @author Iulian Rotaru
  */
 @ApplicationScoped
+@ManagedBean
+@Startup
 public interface Dao
 {
+  void postConstruct();
+  
+  void preDestroy();
+  
   User getUserById(int userId);
 
   List<Zone> getZones();

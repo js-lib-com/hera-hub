@@ -1,9 +1,10 @@
 package js.hera.hub.client;
 
+import java.util.function.Consumer;
+
 import js.hera.dev.Device;
-import js.lang.Callback;
 
 public interface ContactSwitch extends Device
 {
-  void isOpened(Callback<Boolean> callback);
+  void isOpened(Consumer<Boolean> callback);
 }

@@ -3,16 +3,16 @@ package js.hera.hub;
 import java.io.File;
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.container.contextparam.ContextParam;
+import com.jslib.util.Strings;
 
 import jakarta.annotation.Priority;
 import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import js.log.Log;
-import js.log.LogFactory;
-import js.tiny.container.contextparam.ContextParam;
-import js.util.Strings;
+import jakarta.servlet.ServletContext;
 
 @ApplicationScoped
 @Startup

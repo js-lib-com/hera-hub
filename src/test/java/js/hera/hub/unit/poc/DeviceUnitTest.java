@@ -3,18 +3,19 @@ package js.hera.hub.unit.poc;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.function.Consumer;
 
 import org.junit.Ignore;
 
+import com.jslib.net.client.HttpRmiTransaction;
+
 import js.hera.dev.DHTSensor;
-import js.lang.Callback;
-import js.net.client.HttpRmiTransaction;
 import junit.framework.TestCase;
 
 @Ignore
 public class DeviceUnitTest extends TestCase
 {
-  public void testDHTGetValue() throws Exception
+  public void testDHTGetValue() throws Throwable
   {
     final FileWriter writer = new FileWriter("d://tmp/dht.log");
     for(int i = 0; i < 1000; ++i) {
@@ -23,10 +24,10 @@ public class DeviceUnitTest extends TestCase
       rmi.setMethod("js.hera.dev.HostSystem", "invoke");
       rmi.setReturnType(DHTSensor.Value.class);
       rmi.setArguments("dht", "getValue");
-      rmi.exec(new Callback<DHTSensor.Value>()
+      rmi.exec(new Consumer<DHTSensor.Value>()
       {
         @Override
-        public void handle(DHTSensor.Value value)
+        public void accept(DHTSensor.Value value)
         {
           System.out.printf("Humidity:%.02f Temperature:%.02f\r\n", value.getHumidity(), value.getTemperature());
           try {

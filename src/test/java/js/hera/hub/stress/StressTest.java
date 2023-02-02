@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import js.util.Strings;
+import com.jslib.util.Strings;
 
 public abstract class StressTest
 {

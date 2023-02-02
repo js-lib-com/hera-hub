@@ -9,5 +9,5 @@
 	<binding bind="util.JmxServer" />
 	<binding bind="util.NetInterfaces" />
 
-	<binding bind="js.tiny.container.net.EventStream" to="impl.DeviceEventStream" />
+	<binding bind="com.jslib.container.sse.EventStream" to="impl.DeviceEventStream" />
 </app>

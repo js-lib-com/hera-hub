@@ -7,9 +7,10 @@ import static org.hamcrest.Matchers.not;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.jslib.api.json.Json;
+import com.jslib.util.Classes;
+
 import js.hera.dev.DHTSensor;
-import js.json.Json;
-import js.util.Classes;
 
 public class DHTSensorStressTest extends StressTest
 {

@@ -21,7 +21,7 @@ import js.hera.hub.Application;
 import js.hera.hub.dao.DaoImpl;
 import js.hera.hub.model.User;
 import js.hera.hub.model.Zone;
-import js.util.Files;
+import js.hera.hub.util.Files;
 
 /**
  * Unit tests for DAO implementation.

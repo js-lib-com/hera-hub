@@ -1,23 +1,23 @@
 package js.hera.hub.client;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import js.hera.hub.model.DeviceDescriptor;
 import js.hera.hub.model.SystemDescriptor;
 import js.hera.hub.model.Zone;
-import js.lang.Callback;
 
 public interface Service
 {
   // ------------------------------------------------------
   // HERA Smart Hub services
 
-  void getSystemDescriptor(Callback<SystemDescriptor> callback);
+  void getSystemDescriptor(Consumer<SystemDescriptor> consumer);
 
-  void invokeDeviceAction(String deviceName, String actionName, Callback<?> result, Object... arguments);
+  void invokeDeviceAction(String deviceName, String actionName, Consumer<?> result, Object... arguments);
 
   /**
-   * Convenient way to invoker void method without providing callback for asynchronous mode.
+   * Convenient way to invoker void method without providing consumer for asynchronous mode.
    * 
    * @param deviceName
    * @param actionName
@@ -28,13 +28,13 @@ public interface Service
   // ------------------------------------------------------
   // HERA Admin Console services
 
-  void getDevicesByZone(int zoneId, Callback<List<DeviceDescriptor>> callback);
+  void getDevicesByZone(int zoneId, Consumer<List<DeviceDescriptor>> consumer);
 
-  void getDevicesByCategory(int categoryId, Callback<List<DeviceDescriptor>> callback);
+  void getDevicesByCategory(int categoryId, Consumer<List<DeviceDescriptor>> consumer);
 
   void createZone(Zone zone);
 
-  void readZone(int zoneId, Callback<Zone> callback);
+  void readZone(int zoneId, Consumer<Zone> consumer);
 
   void updateZone(Zone zone);
 
@@ -42,7 +42,7 @@ public interface Service
 
   void createDevice(DeviceDescriptor device);
 
-  void readDevice(int deviceId, Callback<DeviceDescriptor> callback);
+  void readDevice(int deviceId, Consumer<DeviceDescriptor> consumer);
 
   void updateDevice(DeviceDescriptor device);
 

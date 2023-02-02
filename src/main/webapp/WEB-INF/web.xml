@@ -5,22 +5,23 @@
 	<description>Smart hub for HERA ecosystem</description>
 
 	<listener>
-		<listener-class>js.tiny.container.servlet.TinyContainer</listener-class>
+		<listener-class>com.jslib.container.servlet.TinyContainer</listener-class>
 	</listener>
 
 	<servlet>
 		<servlet-name>rmi-servlet</servlet-name>
-		<servlet-class>js.tiny.container.net.HttpRmiServlet</servlet-class>
+		<servlet-class>com.jslib.container.rmi.HttpRmiServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>rest-servlet</servlet-name>
-		<servlet-class>js.tiny.container.rest.RestServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
+		<servlet-class>com.jslib.container.rest.RestServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>event-servlet</servlet-name>
-		<servlet-class>js.tiny.container.net.EventStreamServlet</servlet-class>
+		<servlet-class>com.jslib.container.sse.EventStreamServlet</servlet-class>
+		<load-on-startup>3</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>

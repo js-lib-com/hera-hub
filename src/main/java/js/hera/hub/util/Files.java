@@ -1,5 +1,5 @@
 package js.hera.hub.util;
 
-public class Files extends js.util.Files
+public class Files extends com.jslib.util.Files
 {
 }

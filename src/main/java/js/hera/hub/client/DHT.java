@@ -1,11 +1,12 @@
 package js.hera.hub.client;
 
+import java.util.function.Consumer;
+
 import js.hera.dev.Device;
-import js.lang.Callback;
 
 public interface DHT extends Device
 {
-  Value getValue(Callback<DHT.Value> callback);
+  Value getValue(Consumer<DHT.Value> callback);
 
   public static class Value
   {

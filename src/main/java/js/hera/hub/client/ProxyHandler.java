@@ -6,11 +6,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
-import js.lang.BugError;
-import js.lang.Callback;
-import js.net.client.HttpRmiTransaction;
-import js.util.Types;
+import com.jslib.lang.BugError;
+import com.jslib.net.client.HttpRmiTransaction;
+import com.jslib.util.Types;
 
 public class ProxyHandler implements InvocationHandler
 {
@@ -36,13 +36,13 @@ public class ProxyHandler implements InvocationHandler
 
     // initialize return type; for void method uses string since dots responds with 'null' for void
     Type returnType = Types.isVoid(method.getReturnType()) ? String.class : method.getGenericReturnType();
-    Callback<Object> callback = null;
+    Consumer<Object> callback = null;
 
     List<Object> remoteParameters = new ArrayList<Object>();
     if(!isEmpty(arguments)) {
 
       for(int i = 0; i < arguments.length; ++i) {
-        if(!(arguments[i] instanceof Callback)) {
+        if(!(arguments[i] instanceof Consumer)) {
           remoteParameters.add(arguments[i]);
           continue;
         }
@@ -50,7 +50,7 @@ public class ProxyHandler implements InvocationHandler
         // here argument is the callback
         // it is expected to have a single callback; if more, uses the last one
         assert callback == null;
-        callback = (Callback<Object>)arguments[i];
+        callback = (Consumer<Object>)arguments[i];
 
         // if callback is present uses its parameterized type as return type for the remote method
         // extract type parameter from actual argument instance, not from method signature that can contain wild card
@@ -82,10 +82,10 @@ public class ProxyHandler implements InvocationHandler
         return rmi.exec(null);
       }
 
-      callback = new Callback<Object>()
+      callback = new Consumer<Object>()
       {
         @Override
-        public void handle(Object value)
+        public void accept(Object t)
         {
         }
       };

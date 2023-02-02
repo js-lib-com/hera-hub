@@ -1,7 +1,8 @@
 package js.hera.hub.client;
 
+import java.util.function.Consumer;
+
 import js.hera.dev.Device;
-import js.lang.Callback;
 
 /**
  * Thermostat with setpoint.
@@ -12,9 +13,9 @@ public interface SetpointThermostat extends Device
 {
   void setSetpoint(Double setpoint);
 
-  void getSetpoint(Callback<Double> callback);
+  void getSetpoint(Consumer<Double> consumer);
 
-  void getTemperature(Callback<Double> callback);
+  void getTemperature(Consumer<Double> consumer);
 
-  void getState(Callback<Boolean> callback);
+  void getState(Consumer<Boolean> consumer);
 }

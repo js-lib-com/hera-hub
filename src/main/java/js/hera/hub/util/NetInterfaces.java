@@ -12,9 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Params;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.util.Params;
 
 /**
  * Network interfaces attached to host system. This class implements logic to retrieve local IP address able to send
@@ -168,7 +168,7 @@ public final class NetInterfaces
       dump.append("\r\n\t- ");
       dump.append(netInterface.ipAddress);
     }
-    log.debug(dump);
+    log.debug(dump.toString());
   }
 
   /**

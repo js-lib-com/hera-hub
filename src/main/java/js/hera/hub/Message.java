@@ -1,7 +1,7 @@
 package js.hera.hub;
 
-import js.json.Json;
-import js.util.Classes;
+import com.jslib.api.json.Json;
+import com.jslib.util.Classes;
 
 public class Message
 {

@@ -1,11 +1,11 @@
 package js.hera.hub;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Remote;
-import javax.ws.rs.Path;
+import com.jslib.container.sse.EventStream;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
-import js.tiny.container.net.EventStream;
+import jakarta.ws.rs.Path;
 
 @ApplicationScoped
 @Remote

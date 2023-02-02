@@ -1,11 +1,12 @@
 package js.hera.hub.client;
 
+import java.util.function.Consumer;
+
 import js.hera.dev.Device;
-import js.lang.Callback;
 
 public interface ColorLED extends Device
 {
   void setColor(int color);
 
-  void getColor(Callback<Integer> callback);
+  void getColor(Consumer<Integer> callback);
 }

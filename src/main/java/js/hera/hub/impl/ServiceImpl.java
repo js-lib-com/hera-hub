@@ -6,6 +6,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.container.http.form.UploadedFile;
+import com.jslib.io.FilesIterator;
+import com.jslib.util.Files;
+import com.jslib.util.Params;
+import com.jslib.util.Strings;
+
 import jakarta.inject.Inject;
 import js.hera.dev.Actuator;
 import js.hera.dev.BinaryLight;
@@ -35,13 +43,6 @@ import js.hera.hub.model.PowerMeterValue;
 import js.hera.hub.model.SelectItem;
 import js.hera.hub.model.SystemDescriptor;
 import js.hera.hub.model.Zone;
-import js.io.FilesIterator;
-import js.log.Log;
-import js.log.LogFactory;
-import js.tiny.container.http.form.UploadedFile;
-import js.util.Files;
-import js.util.Params;
-import js.util.Strings;
 
 /**
  * Application service.
@@ -80,7 +81,7 @@ final class ServiceImpl implements Service
   }
 
   @Override
-  public Object invoke(String[] parameters) throws Exception
+  public Object invoke(String[] parameters) throws Throwable
   {
     String deviceName = parameters[0];
     String actionName = parameters[1];
@@ -93,7 +94,7 @@ final class ServiceImpl implements Service
   }
   
   @Override
-  public Object invokeDeviceAction(String deviceName, String actionName, Object[] arguments) throws Exception
+  public Object invokeDeviceAction(String deviceName, String actionName, Object[] arguments) throws Throwable
   {
     Params.notEmpty(deviceName, "Device name");
     Params.notEmpty(actionName, "Action name");
@@ -103,7 +104,7 @@ final class ServiceImpl implements Service
 
     DeviceDescriptor descriptor = dao.getDeviceDescriptor(deviceName);
     if(descriptor == null) {
-      log.bug("Missing descriptor for device |%s|.", deviceName);
+      log.error("Missing descriptor for device |%s|.", deviceName);
       return null;
     }
     Host host = dao.getHost(descriptor.getHostId());

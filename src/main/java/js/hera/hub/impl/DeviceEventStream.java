@@ -1,10 +1,11 @@
 package js.hera.hub.impl;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.container.sse.EventStream;
+
 import jakarta.inject.Inject;
 import js.hera.hub.MessageBroker;
-import js.log.Log;
-import js.log.LogFactory;
-import js.tiny.container.net.EventStream;
 
 /**
  * Event stream specialized on push notifications.

@@ -1,6 +1,6 @@
 package js.hera.hub;
 
-import js.log.LogLevel;
+import org.influxdb.InfluxDB.LogLevel;
 
 public class LogRecord
 {

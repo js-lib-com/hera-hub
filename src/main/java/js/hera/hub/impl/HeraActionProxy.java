@@ -1,17 +1,19 @@
 package js.hera.hub.impl;
 
+import java.util.function.Consumer;
+
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.net.client.HttpRmiTransaction;
+import com.jslib.util.Strings;
+
 import js.hera.hub.model.DeviceDescriptor;
-import js.lang.Callback;
-import js.log.Log;
-import js.log.LogFactory;
-import js.net.client.HttpRmiTransaction;
-import js.util.Strings;
 
 public class HeraActionProxy implements DeviceActionProxy
 {
   private static final Log log = LogFactory.getLog(HeraActionProxy.class);
 
-  public Object exec(String hostname, DeviceDescriptor descriptor, String actionName, Object... arguments) throws Exception
+  public Object exec(String hostname, DeviceDescriptor descriptor, String actionName, Object... arguments) throws Throwable
   {
     log.trace("exec(String hostname, DeviceDescriptor descriptor, String actionName, Object... arguments)");
     
@@ -19,10 +21,10 @@ public class HeraActionProxy implements DeviceActionProxy
     rmi.setConnectionTimeout(4000);
     rmi.setReadTimeout(8000);
 
-    rmi.setExceptionHandler(new Callback<Throwable>()
+    rmi.setExceptionHandler(new Consumer<Throwable>()
     {
       @Override
-      public void handle(Throwable throwable)
+      public void accept(Throwable t)
       {
         // log.error(throwable);
         // HeraProxyHandler.this.active = false;

@@ -3,16 +3,17 @@ package js.hera.hub;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Remote;
-import javax.ws.rs.Path;
+import com.jslib.container.http.form.UploadedFile;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -26,7 +27,6 @@ import js.hera.hub.model.PowerMeterValue;
 import js.hera.hub.model.SelectItem;
 import js.hera.hub.model.SystemDescriptor;
 import js.hera.hub.model.Zone;
-import js.tiny.container.http.form.UploadedFile;
 
 @ApplicationScoped
 @Remote
@@ -46,14 +46,15 @@ public interface Service
    * @param arguments variable number of arguments requested by device action.
    * @return action return value.
    * @throws Exception
+   * @throws Throwable 
    */
-  Object invokeDeviceAction(String deviceName, String actionName, Object[] args) throws Exception;
+  Object invokeDeviceAction(String deviceName, String actionName, Object[] args) throws Throwable;
 
   @POST
   @Path("invoke")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  Object invoke(String[] args) throws Exception;
+  Object invoke(String[] args) throws Throwable;
 
   // ------------------------------------------------------
   // HERA Admin Console services

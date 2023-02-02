@@ -1,6 +1,6 @@
 package js.hera.hub;
 
-import js.lang.Event;
+import com.jslib.lang.Event;
 
 public class DeviceState implements Event
 {

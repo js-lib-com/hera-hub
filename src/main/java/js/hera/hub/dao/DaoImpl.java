@@ -2,6 +2,11 @@ package js.hera.hub.dao;
 
 import java.util.List;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.util.Params;
+
+import jakarta.annotation.ManagedBean;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
@@ -11,15 +16,13 @@ import js.hera.hub.model.DeviceDescriptor;
 import js.hera.hub.model.Host;
 import js.hera.hub.model.User;
 import js.hera.hub.model.Zone;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Params;
 
 /**
  * Implementation for Dao managed class.
  * 
  * @author Iulian Rotaru
  */
+@ManagedBean
 public final class DaoImpl implements Dao
 {
   private static final Log log = LogFactory.getLog(DaoImpl.class);
@@ -39,6 +42,7 @@ public final class DaoImpl implements Dao
   @Inject
   public DaoImpl(Application app)
   {
+    log.trace("DaoImpl(Application)");
     userStore = new Store<User>(app, this, STORE_USER, User.class);
     hostStore = new Store<Host>(app, this, STORE_HOST, Host.class);
     zoneStore = new Store<Zone>(app, this, STORE_ZONE, Zone.class);

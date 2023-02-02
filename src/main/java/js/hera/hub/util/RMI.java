@@ -2,7 +2,7 @@ package js.hera.hub.util;
 
 import java.lang.reflect.Type;
 
-import js.net.client.HttpRmiTransaction;
+import com.jslib.net.client.HttpRmiTransaction;
 
 public class RMI
 {
@@ -16,7 +16,7 @@ public class RMI
    * @return remote value.
    * @throws Exception if anything goes wrong.
    */
-  public static Object exec(String hostName, String methodName, Object[] arguments, Type returnType) throws Exception
+  public static Object exec(String hostName, String methodName, Object[] arguments, Type returnType) throws Throwable
   {
     HttpRmiTransaction rmi = HttpRmiTransaction.getInstance("http://" + hostName);
     rmi.setConnectionTimeout(4000);

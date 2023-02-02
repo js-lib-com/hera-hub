@@ -1,12 +1,14 @@
 package js.hera.hub.unit.it;
 
+import java.util.function.Consumer;
+
 import org.junit.Ignore;
+
+import com.jslib.container.spi.Factory;
 
 import js.hera.hub.client.DeviceFactory;
 import js.hera.hub.client.Service;
 import js.hera.hub.client.SetpointThermostat;
-import js.lang.Callback;
-import js.tiny.container.spi.Factory;
 import junit.framework.TestCase;
 
 @Ignore
@@ -36,19 +38,19 @@ public class WebServiceUnitTest extends TestCase
   {
     Service hera = Factory.getInstance(Service.class);
     for(int i = 0; i < 100; ++i) {
-      hera.invokeDeviceAction("heating-system", "getTemperature", new Callback<Double>()
+      hera.invokeDeviceAction("heating-system", "getTemperature", new Consumer<Double>()
       {
         @Override
-        public void handle(Double value)
+        public void accept(Double value)
         {
           System.out.println(value);
         }
       }, i);
 
-      hera.invokeDeviceAction("heating-system", "setSetpoint", new Callback<Double>()
+      hera.invokeDeviceAction("heating-system", "setSetpoint", new Consumer<Double>()
       {
         @Override
-        public void handle(Double value)
+        public void accept(Double value)
         {
           System.out.println(value);
         }
@@ -61,10 +63,10 @@ public class WebServiceUnitTest extends TestCase
   public void testInvokeDeviceAction() throws InterruptedException
   {
     SetpointThermostat thermostat = DeviceFactory.createDeviceProxy("http://localhost/hera-hub", "heating-system", SetpointThermostat.class);
-    thermostat.getSetpoint(new Callback<Double>()
+    thermostat.getSetpoint(new Consumer<Double>()
     {
       @Override
-      public void handle(Double value)
+      public void accept(Double value)
       {
         System.out.println(value);
       }

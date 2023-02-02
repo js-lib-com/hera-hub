@@ -1,7 +1,8 @@
 package js.hera.hub.client;
 
+import java.util.function.Consumer;
+
 import js.hera.dev.Device;
-import js.lang.Callback;
 
 /**
  * Switch the light source on or off. Binary light has two inputs, wall push switch and action from controller via
@@ -45,5 +46,5 @@ public interface BinaryLight extends Device
   /**
    * Get light bulb state. Light bulb state is determined by both wall switch and controller.
    */
-  void getState(Callback<Boolean> callback);
+  void getState(Consumer<Boolean> callback);
 }
